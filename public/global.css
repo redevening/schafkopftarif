@@ -1,0 +1,15 @@
+:root {
+	--bs-body-bg: #131516 !important;
+	--bs-body-color: #d8d4cf !important;
+	--bs-body-font-family: Trebuchet MS, sans-serif !important 
+}
+
+.list-group-item {
+	background-color: var(--bs-body-bg) !important;
+	color: var(--bs-body-color) !important;
+	border: .5px solid rgba(140, 130, 115, 0.13) !important;
+}
+
+.pointer {
+	cursor: pointer;
+}
