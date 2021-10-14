@@ -1,60 +1,66 @@
 :root {
-	--bs-body-bg: #131516 !important;
-	--bs-body-color: #d8d4cf !important;
-	--bs-body-font-family: Trebuchet MS, sans-serif !important;
-	--success: #0f7918 !important;
+	--bs-body-bg: #131516;
+	--bs-body-color: #d8d4cf;
+	--bs-body-font-family: Trebuchet MS, sans-serif;
+	--bs-success: #0f7918;
 }
 
 .btn-success{
-	background-color: var(--success) !important;
-	border-color: var(--success) !important;
+	background-color: var(--bs-success);
+	border-color: var(--bs-success);
 }
 .btn-outline-success {
-	border-color: var(--success) !important;
-	color: var(--success) !important;
+	border-color: var(--bs-success);
+	color: var(--bs-success);
 }
+
 .btn-check:checked + .btn-outline-success {
-	background-color: var(--success) !important;
-	color: #fff !important
+	color: #fff
 }
 
-
-.btn-outline-primary:hover {
-	background-color: currentColor !important;
+.btn {
+	transition: none
 }
-
-.btn-outline-secondary:hover {
-	background-color: currentColor !important;
+.btn-outline-success:hover,
+.btn-outline-primary:hover,
+.btn-outline-secondary:hover,
+.btn-outline-danger:hover,
+.btn-outline-warning:hover,
+.btn-outline-info:hover,
+.btn-outline-light:hover,
+.btn-outline-dark:hover  {
+	background-color: inherit;
+	border-color: inherit;
 }
-
 .btn-outline-success:hover {
-	background-color: currentColor !important;
+	color: var(--bs-success)
 }
-
+.btn-outline-primary:hover {
+	color: var(--bs-primary)
+}
+.btn-outline-secondary:hover {
+	color: var(--bs-secondary)
+}
 .btn-outline-danger:hover {
-	background-color: currentColor !important;
+	color: var(--bs-danger)
 }
-
 .btn-outline-warning:hover {
-	background-color: currentColor !important;
+	color: var(--bs-warning)
 }
-
 .btn-outline-info:hover {
-	background-color: currentColor !important;
+	color: var(--bs-info)
 }
-
 .btn-outline-light:hover {
-	background-color: currentColor !important;
+	color: var(--bs-light)
 }
-
 .btn-outline-dark:hover {
-	background-color: currentColor !important;
+	color: var(--bs-dark)
 }
 
 .list-group-item {
-	background-color: var(--bs-body-bg) !important;
-	color: var(--bs-body-color) !important;
-	border: .5px solid rgba(140, 130, 115, 0.13) !important;
+	background-color: var(--bs-body-bg);
+	color: var(--bs-body-color);
+	border: .5px solid rgba(140, 130, 115, 0.13);
 }
 
 .list-group-item:hover {

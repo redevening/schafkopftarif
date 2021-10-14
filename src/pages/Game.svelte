@@ -5,11 +5,11 @@
         <div class="row justify-content-center px-2">
             <div class="col-6 d-grid gap-2 p-0">
                 <input type="checkbox" class="btn-check" id="sauspiel" checked autocomplete="off">
-                <label class="btn btn-lg btn-outline-success" for="sauspiel">Sauspiel</label>
+                <label class="btn btn-lg btn-outline-success shadow-none" for="sauspiel">Sauspiel</label>
             </div>
             <div class="col-6 d-grid gap-2 p-0">
                 <input type="checkbox" class="btn-check" id="solo" autocomplete="off">
-                <label class="btn btn-lg btn-outline-danger" for="solo">Solo</label>
+                <label class="btn btn-lg btn-outline-danger shadow-none" for="solo">Solo</label>
             </div>
         </div>
 
@@ -17,19 +17,19 @@
         <div class="row justify-content-center my-3 px-2">
             <div class="col-3 d-grid gap-2 p-0">
                 <input type="checkbox" class="btn-check" id="p1" checked autocomplete="off">
-                <label class="btn btn-lg btn-outline-primary" for="p1">Tom</label>
+                <label class="btn btn-lg btn-outline-primary shadow-none" for="p1">Tom</label>
             </div>
             <div class="col-3 d-grid gap-2 p-0">
                 <input type="checkbox" class="btn-check" id="p2" autocomplete="off">
-                <label class="btn btn-lg btn-outline-secondary" for="p2">Hadde</label>
+                <label class="btn btn-lg btn-outline-secondary shadow-none" for="p2">Hadde</label>
             </div>
             <div class="col-3 d-grid gap-2 p-0">
                 <input type="checkbox" class="btn-check" id="p3" checked autocomplete="off">
-                <label class="btn btn-lg btn-outline-info" for="p3">Wal</label>
+                <label class="btn btn-lg btn-outline-info shadow-none" for="p3">Wal</label>
             </div>
             <div class="col-3 d-grid gap-2 p-0">
                 <input type="checkbox" class="btn-check" id="p4" autocomplete="off">
-                <label class="btn btn-lg btn-outline-light" for="p4">Ruben</label>
+                <label class="btn btn-lg btn-outline-light shadow-none" for="p4">Ruben</label>
             </div>
         </div>
 
@@ -38,11 +38,11 @@
         <div class="row justify-content-center px-2">
             <div class="col-6 d-grid gap-2 p-0">
                 <input type="checkbox" class="btn-check" id="schneider" checked autocomplete="off">
-                <label class="btn btn-lg btn-outline-warning" for="schneider">Scheider</label>
+                <label class="btn btn-lg btn-outline-warning shadow-none" for="schneider">Scheider</label>
             </div>
             <div class="col-6 d-grid gap-2 p-0">
                 <input type="checkbox" class="btn-check" id="schwarz" autocomplete="off">
-                <label class="btn btn-lg btn-outline-danger" for="schwarz">Schwarz</label>
+                <label class="btn btn-lg btn-outline-danger shadow-none" for="schwarz">Schwarz</label>
             </div>
         </div>
 
@@ -82,6 +82,4 @@
 
 <script>
     export let params
-
-    const array16 = Array.from({length: 16}, (_, i) => i + 1)
 </script>
