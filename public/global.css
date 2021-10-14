@@ -1,7 +1,54 @@
 :root {
 	--bs-body-bg: #131516 !important;
 	--bs-body-color: #d8d4cf !important;
-	--bs-body-font-family: Trebuchet MS, sans-serif !important 
+	--bs-body-font-family: Trebuchet MS, sans-serif !important;
+	--success: #0f7918 !important;
+}
+
+.btn-success{
+	background-color: var(--success) !important;
+	border-color: var(--success) !important;
+}
+.btn-outline-success {
+	border-color: var(--success) !important;
+	color: var(--success) !important;
+}
+.btn-check:checked + .btn-outline-success {
+	background-color: var(--success) !important;
+	color: #fff !important
+}
+
+
+.btn-outline-primary:hover {
+	background-color: currentColor !important;
+}
+
+.btn-outline-secondary:hover {
+	background-color: currentColor !important;
+}
+
+.btn-outline-success:hover {
+	background-color: currentColor !important;
+}
+
+.btn-outline-danger:hover {
+	background-color: currentColor !important;
+}
+
+.btn-outline-warning:hover {
+	background-color: currentColor !important;
+}
+
+.btn-outline-info:hover {
+	background-color: currentColor !important;
+}
+
+.btn-outline-light:hover {
+	background-color: currentColor !important;
+}
+
+.btn-outline-dark:hover {
+	background-color: currentColor !important;
 }
 
 .list-group-item {
@@ -10,6 +57,20 @@
 	border: .5px solid rgba(140, 130, 115, 0.13) !important;
 }
 
+.list-group-item:hover {
+	filter: brightness(200%)
+}
+
 .pointer {
 	cursor: pointer;
+}
+label {
+	color: var(--bs-body-bg)
+}
+.light {
+	color: var(--bs-body-color)
+}
+.monospace {
+	font-family: 'Courier New', Courier, monospace;
+	font-weight: 700;
 }
