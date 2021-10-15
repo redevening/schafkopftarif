@@ -1,5 +1,3 @@
-<h1 class="my-4">Spiel eintragen</h1>
-
 <form on:submit|preventDefault="{recordPlay}">
     <div class="container text-start">
         <div class="row justify-content-center px-2">
@@ -86,9 +84,6 @@
     <button type="submit" class="btn btn-lg btn-success my-4">Spiel eintragen</button>
 </form>
 
-
-
-
 <script>
     import { Play, Game, GAMES_KEY } from "../common/game"
     import { onMount } from "svelte"
@@ -120,7 +115,7 @@
     }
 
     function togglePlayer(i) {
-        //toggle same button
+        //toggle same player button
         if(p1 === i) {
             p1 = undefined
             return

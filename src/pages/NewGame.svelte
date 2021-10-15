@@ -70,10 +70,7 @@
 <script>
     import {GAMES_KEY, Game} from "../common/game"
     import router from "page"
-    let name = "", p1 = "",  p2 = "",  p3 = "",  p4 = "", sauspiel = 20, solo = 50, extra = 10
-
-
-
+    let name = "Sauspielfreunde", p1 = "P1",  p2 = "P2",  p3 = "P3",  p4 = "p4", sauspiel = 20, solo = 50, extra = 10
 
     function startRound() {
         let allGames = []
@@ -90,7 +87,5 @@
         localStorage.setItem(GAMES_KEY, JSON.stringify(allGames))
         console.log("saved games", allGames)
         router(`/game/${game.id}`)
-
-        
     }
 </script>
