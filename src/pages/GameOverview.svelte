@@ -97,9 +97,6 @@
             .map(p => new Play(p.isSolo, p.p1, p.p2, p.isWon,
                 p.schneider, p.schwarz, p.lauf, p.multiplicator,
                 p.sauspielPrice, p.soloPrice, p.extraPrice ))
-        console.log("GGGG", game)
-
-
     })
 
     function formatEarnings(g, i) {
@@ -110,10 +107,7 @@
     }
 
     function newPlay() {
-        console.log(params)
         router(`/game/${params.id}/play`)
     }
-
-
-
+    
 </script>
