@@ -80,12 +80,10 @@
             console.error("Error retrieving games", e)
         }
         
-        console.log("initial games", allGames)
         const id = allGames.length;
         const game = new Game(id, name, p1, p2, p3, p4, sauspiel, solo, extra);
         allGames.push(game)
         localStorage.setItem(GAMES_KEY, JSON.stringify(allGames))
-        console.log("saved games", allGames)
         router(`/game/${game.id}`)
     }
 </script>

@@ -17,7 +17,6 @@
         try {
             games = JSON.parse(localStorage.getItem(GAMES_KEY)) || []
             games.reverse()
-            console.log(games)
         } catch(e){
             console.error("Could not retrieve games", localStorage.getItem(ROUNDS_KEY))
         }
