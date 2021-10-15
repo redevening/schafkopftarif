@@ -15,19 +15,19 @@
         <div class="row justify-content-center my-3 px-2">
             <div class="col-3 d-grid gap-2 p-0">
                 <input type="checkbox" class="btn-check" id="p1" autocomplete="off" checked={p1 === 1 || p2 === 1} on:click|preventDefault={() => togglePlayer(1)} >
-                <label class="btn btn-lg btn-outline-primary shadow-none" for="p1" on:click|preventDefault={() => togglePlayer(1)}>Tom</label>
+                <label class="btn btn-lg btn-outline-primary shadow-none" for="p1" on:click|preventDefault={() => togglePlayer(1)}>{game.p1Name}</label>
             </div>
             <div class="col-3 d-grid gap-2 p-0">
                 <input type="checkbox" class="btn-check" id="p2" autocomplete="off" checked={p1 === 2 || p2 === 2} on:click|preventDefault={() => togglePlayer(2)}>
-                <label class="btn btn-lg btn-outline-secondary shadow-none" for="p2" on:click|preventDefault={() => togglePlayer(2)}>Hadde</label>
+                <label class="btn btn-lg btn-outline-secondary shadow-none" for="p2" on:click|preventDefault={() => togglePlayer(2)}>{game.p2Name}</label>
             </div>
             <div class="col-3 d-grid gap-2 p-0">
                 <input type="checkbox" class="btn-check" id="p3" autocomplete="off" checked={p1 === 3 || p2 === 3} on:click|preventDefault={() => togglePlayer(3)}>
-                <label class="btn btn-lg btn-outline-info shadow-none" for="p3" on:click|preventDefault={() => togglePlayer(3)}>Wal</label>
+                <label class="btn btn-lg btn-outline-info shadow-none" for="p3" on:click|preventDefault={() => togglePlayer(3)}>{game.p3Name}</label>
             </div>
             <div class="col-3 d-grid gap-2 p-0">
                 <input type="checkbox" class="btn-check" id="p4" autocomplete="off"  checked={p1 === 4 || p2 === 4} on:click|preventDefault={() => togglePlayer(4)}>
-                <label class="btn btn-lg btn-outline-light shadow-none" for="p4" on:click|preventDefault={() => togglePlayer(4)}>Ruben</label>
+                <label class="btn btn-lg btn-outline-light shadow-none" for="p4" on:click|preventDefault={() => togglePlayer(4)}>{game.p4Name}</label>
             </div>
         </div>
         <hr>
@@ -97,11 +97,8 @@
 
     onMount(() => {
         try {
-            console.log("params", params)
             allGames = JSON.parse(localStorage.getItem(GAMES_KEY)) || []
-            console.log("games", allGames)
             game = allGames[params.id]
-            console.log("GAme", game)
         } catch(e){
             console.error("Could not retrieve game", localStorage.getItem(GAMES_KEY))
         }
@@ -169,7 +166,6 @@
         }
         // Set dealer to next player
         game.dealer = (game.dealer % 4) + 1
-        console.log("DEALER", game.dealer)
 
         // record game
         game.plays.push(play)
@@ -177,6 +173,4 @@
         localStorage.setItem(GAMES_KEY, JSON.stringify(allGames))
         router(`/game/${params.id}`)
     }
-
-
 </script>
