@@ -62,7 +62,7 @@
             {game[`p${play.p1}Name`]} {!play.isSolo ? "+" : ""} {game[`p${play.p2}Name`] ? game[`p${play.p2}Name`] : ""}
         </div>
         <div class="col-5 border">
-            <span class="monospace">{play.price > 0 ? "+" : "-"} {Math.abs(play.price).toString().padStart(4, "\u00A0")}</span> P
+            <span class="monospace">{play.isSolo ? "3x " : "\u00A0\u00A0\u00A0"}{play.price > 0 ? "+" : "-"} {Math.abs(play.price).toString().padStart(3, "\u00A0")}</span> P
         </div>
     </div>
     {/each}

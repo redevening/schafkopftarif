@@ -1,5 +1,5 @@
 <form on:submit|preventDefault="{recordPlay}">
-    <div class="container text-start">
+    <div class="container text-start my-1">
         <div class="row justify-content-center px-2">
             <div class="col-6 d-grid gap-2 p-0">
                 <input type="checkbox" class="btn-check" id="sauspiel" autocomplete="off" checked={!isSolo} on:click|preventDefault={toggleIsSolo}>
@@ -53,36 +53,45 @@
             </div>
         </div>
 
-        <div class="row my-2">
-            <div class="col-5 text-end">
-                <label class="col-form-label light" for="laufer">Läufer:</label>
+        <div class="row justify-content-around align-items-center my-2">
+            <div class="col-5 row justify-content-end align-items-center">
+                Läufer: <button class="btn btn-dark col-3 ms-2" on:click|preventDefault={() => lauf = lauf > 0 ? lauf-1 : lauf}>-</button>
             </div>
-            <div class="col-4 col-sm-3">
-                <select class="form-select" bind:value={lauf}>
-                    {#each Array.from({length: 15}) as _, i}
-                    <option value="{i}">{i}</option>
-                    {/each}
-                </select>
+            <div class="col-2 text-center fs-3">
+                <div class="circle">{lauf}</div>
+            </div>
+            <div class="col-5 row justify-content-start align-items-center">
+                <button class="btn btn-dark col-3" on:click|preventDefault={() => lauf = lauf < 14 ? lauf+1 : lauf}>+</button>
             </div>
         </div>
-        <div class="row my-2">
-            <div class="col-5 text-end">
-                <label class="col-form-label light" for="sauspiel">Klopfer/Contra/Re:</label>
+
+        <div class="row justify-content-around align-items-center my-2">
+            <div class="col-5 row justify-content-end align-items-center">
+                Klopfer: <button class="btn btn-dark col-3 ms-2" on:click|preventDefault={() => klopf = klopf > 0 ? klopf-1 : klopf}>-</button>
             </div>
-            <div class="col-4 col-sm-3">
-                <select class="form-select" bind:value={multiplicator}>
-                    {#each Array.from({length: 7}) as _, i}
-                    <option value="{Math.pow(2,i)}">{`${Math.pow(2,i)} x`}</option>
-                    {/each}
-                </select>
+            <div class="col-2 text-center fs-3">
+                <div class="circle">{klopf}</div>
+            </div>
+            <div class="col-5 row justify-content-start align-items-center">
+                <button class="btn btn-dark col-3" on:click|preventDefault={() => klopf = klopf < 6 ? klopf+1 : klopf}>+</button>
             </div>
         </div>
     </div>
     <hr>
     <h2>Preis: {isSolo ? "3 x" : ""} {play.price} Punkte {isSolo ? `(${3*play.price} P)` : ""}</h2>
     <hr>
-    <button type="submit" class="btn btn-lg btn-success my-4">Spiel eintragen</button>
+    <button type="submit" class="btn btn-lg btn-success">Spiel eintragen</button>
 </form>
+
+<style>
+    .circle {
+        border: 2px solid #fff;
+        border-radius: 50%;
+        width: 2.5rem;
+        height: 2.5rem;
+        line-height: 2.2rem
+    }
+</style>
 
 <script>
     import { Play, Game, GAMES_KEY } from "../common/game"
@@ -91,8 +100,9 @@
 
     export let params
 
-    let isSolo = false, p1, p2, isWon = false, schneider = false, schwarz = false, lauf = 0, multiplicator = 1
+    let isSolo = false, p1, p2, isWon = false, schneider = false, schwarz = false, lauf = 0, klopf = 0
     let game = new Game(), allGames
+    $: multiplicator = Math.pow(2, klopf)
     $: play = new Play(isSolo, p1, p2, isWon, schneider, schwarz, lauf, multiplicator, 20, 50, 10)
 
     onMount(() => {
