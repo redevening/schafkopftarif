@@ -1,29 +1,34 @@
-
 <h1 class="my-4">Schafkopftarif</h1>
-<button type="button" class="btn btn-success my-4" on:click="{createRound}">Neue Runde</button>
+<button type="button" class="btn btn-success my-4" on:click="{createGame}">Neue Runde</button>
 <h2 class="my-4">Laufende Runden:</h2>
 <ul class="list-group">
-{#each rounds as round}
-    <li class="list-group-item pointer" on:click="{() => openRound(round.id)}">{round.name}</li>
+{#each games as game}
+    <li class="list-group-item pointer" on:click="{() => openGame(game.id)}">{game.name} ({game.p1Name}, {game.p2Name}, {game.p3Name}, {game.p4Name})</li>
 {/each}
 </ul>
 
 <script>
+    import {GAMES_KEY} from "../common/game"
     import router from "page"
+    import { onMount } from "svelte"
+    
+    let games = []
+    onMount(() => {
+        try {
+            games = JSON.parse(localStorage.getItem(GAMES_KEY)) || []
+            games.reverse()
+            console.log(games)
+        } catch(e){
+            console.error("Could not retrieve games", localStorage.getItem(ROUNDS_KEY))
+        }
+    })
 
-    let rounds = [
-        {id: 1, name: "Sauspielfreunde"},
-        {id: 2, name: "Haddes Beste"},
-        {id: 3, name: "Simons Struggles"},
-        {id: 4, name: "Tom-Hadde-Wal-Ruben"},
-    ]
-
-    function createRound() {
-       router("/round")
+    function createGame() {
+       router("/game")
     }
     
-    function openRound(id) {
-        router(`/round/${id}`)
+    function openGame(id) {
+        router(`/game/${id}`)
     }
 
 </script>
