@@ -33,7 +33,6 @@
     function deleteGame(id) {
         const toDelete = games.find(x => x.id === id);
         const isConfirmed = window.confirm(`Willst du die Runde wirklich Runde ${toDelete.name} löschen?`);
-        debugger;
         if(isConfirmed){
             // Remove game
             games.splice(games.indexOf(toDelete), 1)

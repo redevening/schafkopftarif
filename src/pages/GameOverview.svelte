@@ -44,9 +44,12 @@
     <div class="ms-3 lead">
         {game[`p${game.dealer}Name`]}
     </div>
-    <div class="row justify-content-center">
-        <div class="col-6 d-grid gap-2">
-            <button type="button" class="btn btn-lg btn-success my-2" on:click="{newPlay}">Spiel eintragen</button>
+    <div class="row justify-content-evenly">
+        <div class="col-3">
+            <button class="btn btn-lg btn-success" on:click="{newPlay}">Spiel eintragen</button>
+        </div>
+        <div class="col-3">
+            <button class="btn btn-lg btn-outline-danger" on:click="{skipPlay}">Zusammenwerfen</button>
         </div>
     </div>
     <hr>
@@ -104,6 +107,17 @@
         const sign = earnings > 0 ? "+" : "-" 
         const padded = ("" + Math.abs(earnings)).padStart(5, "\u00A0")
         return `${sign} ${padded}`
+    }
+
+    function skipPlay() {
+        //Set dealer locally
+        game.dealer = (game.dealer % 4) + 1
+
+        // Persist dealer
+        const allGames = JSON.parse(localStorage.getItem(GAMES_KEY)) || []
+        const found = allGames.find(x => x.id === game.id)
+        found.dealer = game.dealer
+        localStorage.setItem(GAMES_KEY, JSON.stringify(allGames))
     }
 
     function newPlay() {
