@@ -83,8 +83,8 @@
 <script>
     import {GAMES_KEY, Game} from "../common/game"
     import router from "page"
-    const G1 = ["Zillertaler", "Alderstätter", "Biertrinker", "Sauspiel", "Schmusi", "Mercedeshasser", "Football", "Grisgram"]
-    const G2 = ["schwubsis", "heizungsbauern", "kartler", "freunde", "spezis", "audischrauber"]
+    const G1 = ["Zillertaler", "Alderstätter", "Biertrinker", "Sauspiel", "Schmusi", "Mercedeshasser", "Football", "Grisgram", "Chai-Latte", "Cappocino", "Herzbuben", "Bauhaus", "Armuts", "Links-Grün"]
+    const G2 = ["schwubsis", "heizungsbauern", "kartler", "freunde", "spezis", "audischrauber", "schwurbler", "vampirjaga", "säufer", "versifften", "Identitären"]
     const NAMES = ["Ade", "Anderl", "Beda", "Done", "Franz", "Schos", "Lenzi", "Wast", "Xare", "Babett", "Betti", "Anni", "Evi", "Gerta", "Kathi", "Magda", "Reserl", "Sigi", "Vroni", "Zenze"]
     function randomName() {
         const rnd = NAMES[Math.floor(Math.random()*NAMES.length)]
