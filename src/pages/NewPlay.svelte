@@ -103,7 +103,7 @@
     let isSolo = false, p1, p2, isWon = false, schneider = false, schwarz = false, lauf = 0, klopf = 0
     let game = new Game(), allGames
     $: multiplicator = Math.pow(2, klopf)
-    $: play = new Play(isSolo, p1, p2, isWon, schneider, schwarz, lauf, multiplicator, 20, 50, 10)
+    $: play = new Play(isSolo, p1, p2, isWon, schneider, schwarz, lauf, multiplicator, game.sauspiel, game.solo, game.extra)
 
     onMount(() => {
         try {
