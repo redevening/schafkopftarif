@@ -11,24 +11,37 @@
 
         <h2>Spieler</h2>
         <div class="row justify-content-center my-2">
+            <div class="col-2">
+                <img src="https://avatars.dicebear.com/api/adventurer/{p1}-image.svg" alt="avatar" height="60px">
+            </div>
             <div class="form-floating col-sm-6">
                 <input class="form-control" id="p1" bind:value={p1} required>
                 <label for="p1">Spieler 1</label>
             </div>
+            
         </div>
         <div class="row justify-content-center my-2">
+            <div class="col-2">
+                <img src="https://avatars.dicebear.com/api/adventurer/{p2}-image.svg" alt="avatar" height="60px">
+            </div>
             <div class="form-floating col-sm-6">
                 <input class="form-control" id="p2" bind:value={p2} required>
                 <label for="p2">Spieler 2</label>
             </div>
         </div>
         <div class="row justify-content-center my-2">
+            <div class="col-2">
+                <img src="https://avatars.dicebear.com/api/adventurer/{p3}-image.svg" alt="avatar" height="60px">
+            </div>
             <div class="form-floating col-sm-6">
                 <input class="form-control"  id="p3" bind:value={p3} required>
                 <label for="p3">Spieler 3</label>
             </div>
         </div>
         <div class="row justify-content-center my-2">
+            <div class="col-2">
+                <img src="https://avatars.dicebear.com/api/adventurer/{p4}-image.svg" alt="avatar" height="60px">
+            </div>
             <div class="form-floating col-sm-6">
                 <input class="form-control" id="p4" bind:value={p4} required>
                 <label for="p4">Spieler 4</label>
@@ -70,7 +83,23 @@
 <script>
     import {GAMES_KEY, Game} from "../common/game"
     import router from "page"
-    let name = "Sauspielfreunde", p1 = "P1",  p2 = "P2",  p3 = "P3",  p4 = "p4", sauspiel = 20, solo = 50, extra = 10
+    const G1 = ["Zillertaler", "Alderstätter", "Biertrinker", "Sauspiel", "Schmusi", "Mercedeshasser", "Football", "Grisgram"]
+    const G2 = ["schwubsis", "heizungsbauern", "kartler", "freunde", "spezis", "audischrauber"]
+    const NAMES = ["Ade", "Anderl", "Beda", "Done", "Franz", "Schos", "Lenzi", "Wast", "Xare", "Babett", "Betti", "Anni", "Evi", "Gerta", "Kathi", "Magda", "Reserl", "Sigi", "Vroni", "Zenze"]
+    function randomName() {
+        const rnd = NAMES[Math.floor(Math.random()*NAMES.length)]
+        NAMES.splice(NAMES.indexOf(rnd), 1)
+        return rnd
+    }
+    function randomGroup() {
+        const g1 =  G1[Math.floor(Math.random()*G1.length)]
+        G1.splice(G1.indexOf(g1), 1)
+        const g2 =  G2[Math.floor(Math.random()*G2.length)]
+        G2.splice(G2.indexOf(g2), 1)
+        return `${g1}${g2}`
+    }
+    
+    let name = randomGroup(), p1 = randomName(),  p2 = randomName(),  p3 = randomName(),  p4 = randomName(), sauspiel = 20, solo = 50, extra = 10
 
     function startRound() {
         let allGames = []
