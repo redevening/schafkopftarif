@@ -19,8 +19,8 @@ self.addEventListener('install', function(e) {
 /* Serve cached content when offline */
 self.addEventListener('fetch', function(e) {
   e.respondWith(
-    caches.match(e.request).then(function(response) {
-      return response || fetch(e.request);
+    fetch(e.request).catch(function() {
+      return caches.match(e.request)
     })
-  );
+  )
 });
