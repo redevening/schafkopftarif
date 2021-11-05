@@ -84,6 +84,6 @@
         const game = new Game(id, name, p1, p2, p3, p4, sauspiel, solo, extra);
         allGames.push(game)
         localStorage.setItem(GAMES_KEY, JSON.stringify(allGames))
-        router(`/game/${game.id}`)
+        router(`/`)
     }
 </script>
