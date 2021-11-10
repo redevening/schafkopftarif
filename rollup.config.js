@@ -4,7 +4,10 @@ import resolve from '@rollup/plugin-node-resolve';
 import livereload from 'rollup-plugin-livereload';
 import { terser } from 'rollup-plugin-terser';
 import css from 'rollup-plugin-css-only';
+import replace from "@rollup/plugin-replace";
+import dotenv from "dotenv";
 
+dotenv.config();
 const production = !process.env.ROLLUP_WATCH;
 
 function serve() {
@@ -37,6 +40,17 @@ export default {
 		file: 'public/build/bundle.js'
 	},
 	plugins: [
+		replace({
+			"FIREBASE_APIKEY": JSON.stringify(process.env.FIREBASE_APIKEY),
+			"FIREBASE_AUTHDOMAIN": JSON.stringify(process.env.FIREBASE_AUTHDOMAIN),
+			"FIREBASE_PROJECTID": JSON.stringify(process.env.FIREBASE_PROJECTID),
+			"FIREBASE_STORAGEBUCKET": JSON.stringify(process.env.FIREBASE_STORAGEBUCKET),
+			"FIREBASE_MESSAGINGID": JSON.stringify(process.env.FIREBASE_MESSAGINGID),
+			"FIREBASE_APPID": JSON.stringify(process.env.FIREBASE_APPID),
+			"FIREBASE_MEASUREMENTID": JSON.stringify(process.env.FIREBASE_MEASUREMENTID),
+			"process.env.production": production
+		}),
+
 		svelte({
 			compilerOptions: {
 				// enable run-time checks when not in production

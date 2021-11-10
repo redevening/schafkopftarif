@@ -1,4 +1,4 @@
-var cacheName = 'hello-pwa';
+var cacheName = 'schafkopftarif';
 var filesToCache = [
   '/',
   '/global.css',
@@ -18,6 +18,13 @@ self.addEventListener('install', function(e) {
 
 /* Serve cached content when offline */
 self.addEventListener('fetch', function(e) {
+
+  if(e.request.url.contains("googleapis")) {
+    // Don't mess up firebase stuff
+    return
+  }
+
+
   e.respondWith(
     fetch(e.request).catch(function() {
       return caches.match(e.request)

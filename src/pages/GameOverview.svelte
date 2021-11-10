@@ -5,7 +5,7 @@
 
     <div class="row justify-content-between">
         <div class="col">
-            <span>- {game.p1Name}:</span>
+            <span>- {game.p1.name}:</span>
         </div>
         <div class="col text-end">
             <span class="monospace">{p1Earnings}</span> Punkte
@@ -14,7 +14,7 @@
 
     <div class="row justify-content-between">
         <div class="col">
-            <span>- {game.p2Name}:</span>
+            <span>- {game.p2.name}:</span>
         </div>
         <div class="col text-end">
             <span class="monospace">{p2Earnings}</span> Punkte
@@ -23,7 +23,7 @@
 
     <div class="row justify-content-between">
         <div class="col">
-            <span>- {game.p3Name}:</span>
+            <span>- {game.p3.name}:</span>
         </div>
         <div class="col text-end">
             <span class="monospace">{p3Earnings}</span> Punkte
@@ -32,7 +32,7 @@
 
     <div class="row justify-content-between">
         <div class="col">
-            <span>- {game.p4Name}:</span>
+            <span>- {game.p4.name}:</span>
         </div>
         <div class="col text-end">
             <span class="monospace">{p4Earnings}</span> Punkte
@@ -42,14 +42,14 @@
 
     <h2 class="text-start mt-4">Geber:</h2>
     <div class="ms-3 lead">
-        {game[`p${game.dealer}Name`]}
+        {dealerName}
     </div>
-    <div class="row justify-content-evenly">
-        <div class="col-3">
+    <div class="row align-items-center">
+        <div class="col-8 d-flex justify-content-end">
             <button class="btn btn-lg btn-success" on:click="{newPlay}">Spiel eintragen</button>
         </div>
-        <div class="col-3">
-            <button class="btn btn-lg btn-outline-danger" on:click="{skipPlay}">Zusammenwerfen</button>
+        <div class="col-4  d-flex justify-content-end">
+            <button class="btn btn-outline-danger" on:click="{skipPlay}">Zamschmeißn</button>
         </div>
     </div>
     <hr>
@@ -59,65 +59,64 @@
     {#each orderedPlays as play}
     <div class="row justify-content-between text-center fs-6 px-1">
         <div class="col-3 border">
-            {play.isSolo ? "Solo" : "Sauspiel"}
+            {play.isSkip ? "Zamgschmissn" : (play.isSolo ? "Solo" : "Sauspiel")}
         </div>
         <div class="col-4 border">
-            {game[`p${play.p1}Name`]} {!play.isSolo ? "+" : ""} {game[`p${play.p2}Name`] ? game[`p${play.p2}Name`] : ""}
+            {#if !play.isSkip}
+                {play.p1 ? play.p1.name : ""} {!play.isSolo ? "+" : ""} {play.p2 ? play.p2.name : ""}
+            {/if}
         </div>
         <div class="col-5 border">
-            <span class="monospace">{play.isSolo ? "3x " : "\u00A0\u00A0\u00A0"}{play.price > 0 ? "+" : "-"} {Math.abs(play.price).toString().padStart(3, "\u00A0")}</span> P
-        </div>
+            {#if !play.isSkip}
+                <span class="monospace">{play.isSolo ? "3x " : "\u00A0\u00A0\u00A0"}{play.isWon ? "+" : "-"} {Math.abs(play.price).toString().padStart(3, "\u00A0")}</span> P
+            {/if}
+            </div>
     </div>
     {/each}
 </div>
 
 <script>
     import router from "page"
-    import {onMount} from "svelte"
-    import {GAMES_KEY, Game, Play} from "../common/game"
+    import {onMount, onDestroy} from "svelte"
+    import {emptyGame, emptyPlay, calculateEarningsForPlayer} from "../common/game"
+    import {fetchGameDocumentRealtime, fetchPlayDocumentsRealtime, unsubscribe, createPlayDocument, updateGameDocument} from "../common/db"
 
     export let params
 
-    let game = new Game()
-    $: orderedPlays = game.plays.slice().reverse()
-    $: p1Earnings = formatEarnings(game, 1)
-    $: p2Earnings = formatEarnings(game, 2)
-    $: p3Earnings = formatEarnings(game, 3)
-    $: p4Earnings = formatEarnings(game, 4)
+    let game = emptyGame
+    let plays = []
+    $: orderedPlays = [...plays].sort((a,b) => (a === null)- (b === null) || b.created - a.created)
+    $: p1Earnings = formatEarnings(game.p1, plays)
+    $: p2Earnings = formatEarnings(game.p2, plays)
+    $: p3Earnings = formatEarnings(game.p3, plays)
+    $: p4Earnings = formatEarnings(game.p4, plays)
+    $: dealerName = game[`p${game.dealer}`].name
 
     onMount(() => {
-        let g
-        try {
-            const games = JSON.parse(localStorage.getItem(GAMES_KEY)) || []
-            g = games[params.id]
-        } catch(e){
-            console.error("Could not retrieve game", localStorage.getItem(GAMES_KEY))
-        }
-
-        // Build Game Object from dumb JSON
-        game = new Game(g.id, g.name, g.p1Name, g.p2Name, g.p3Name, g.p4Name, g.sauspiel, g.solo, g.extra, g.dealer)
-        game.plays = g.plays
-            .map(p => new Play(p.isSolo, p.p1, p.p2, p.isWon,
-                p.schneider, p.schwarz, p.lauf, p.multiplicator,
-                p.sauspielPrice, p.soloPrice, p.extraPrice ))
+        fetchGameDocumentRealtime(params.id, gameData => game = gameData)
+        fetchPlayDocumentsRealtime(params.id, playsData => plays = playsData)
     })
+    onDestroy(() => unsubscribe())
 
-    function formatEarnings(g, i) {
-        const earnings = g.calculateEarnings(i)
+    function formatEarnings(player, plays) {
+        const earnings = calculateEarningsForPlayer(player, plays)
         const sign = earnings > 0 ? "+" : "-" 
         const padded = ("" + Math.abs(earnings)).padStart(5, "\u00A0")
         return `${sign} ${padded}`
     }
 
-    function skipPlay() {
-        //Set dealer locally
-        game.dealer = (game.dealer % 4) + 1
+    async function skipPlay() {
+        // Create skip game
+        const skip = {
+            ...emptyPlay,
+            gameId: params.id,
+            isSkip: true
+        }
+        await createPlayDocument(skip)
 
-        // Persist dealer
-        const allGames = JSON.parse(localStorage.getItem(GAMES_KEY)) || []
-        const found = allGames.find(x => x.id === game.id)
-        found.dealer = game.dealer
-        localStorage.setItem(GAMES_KEY, JSON.stringify(allGames))
+        // Set dealer to next player
+        const dealer = (game.dealer % 4) + 1
+        await updateGameDocument(game.id, {dealer: dealer})
     }
 
     function newPlay() {
