@@ -58,7 +58,7 @@
 
     {#each orderedPlays as play}
     <div class="row justify-content-between text-center fs-6 px-1">
-        <div class="col-3 border">
+        <div class="col-4 border">
             {play.isSkip ? "Zamgschmissn" : (play.isSolo ? "Solo" : "Sauspiel")}
         </div>
         <div class="col-4 border">
@@ -66,7 +66,7 @@
                 {play.p1 ? play.p1.name : ""} {!play.isSolo ? "+" : ""} {play.p2 ? play.p2.name : ""}
             {/if}
         </div>
-        <div class="col-5 border">
+        <div class="col-4 border">
             {#if !play.isSkip}
                 <span class="monospace">{play.isSolo ? "3x " : "\u00A0\u00A0\u00A0"}{play.isWon ? "+" : "-"} {Math.abs(play.price).toString().padStart(3, "\u00A0")}</span> P
             {/if}
