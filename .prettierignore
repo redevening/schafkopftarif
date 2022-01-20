@@ -1,0 +1,17 @@
+**/*.svg
+**/*.png
+
+.env
+.gitignore
+.prettierignore
+package-lock.json
+
+/docs/
+public/build
+public/android
+public/ios
+public/windows11
+public/_redirects
+
+/.husky/
+/node_modules/
