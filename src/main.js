@@ -17,6 +17,7 @@ import {
   CACHE_SIZE_UNLIMITED,
 } from "@firebase/firestore";
 
+/* eslint-disable no-undef */
 const firebaseConfig = {
   apiKey: FIREBASE_APIKEY,
   authDomain: FIREBASE_AUTHDOMAIN,
@@ -30,6 +31,8 @@ const firebase = initializeApp(firebaseConfig);
 const db = initializeFirestore(firebase, {
   cacheSizeBytes: CACHE_SIZE_UNLIMITED,
 });
+/* eslint-enable no-undef*/
+
 enableIndexedDbPersistence(db);
 
 // Setup Front End
