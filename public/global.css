@@ -1,25 +1,25 @@
 :root {
-	--bs-body-bg: #131516;
-	--bs-body-color: #d8d4cf;
-	--bs-body-font-family: Trebuchet MS, sans-serif;
-	--bs-success: #0f7918;
+  --bs-body-bg: #131516;
+  --bs-body-color: #d8d4cf;
+  --bs-body-font-family: Trebuchet MS, sans-serif;
+  --bs-success: #0f7918;
 }
 
-.btn-success{
-	background-color: var(--bs-success);
-	border-color: var(--bs-success);
+.btn-success {
+  background-color: var(--bs-success);
+  border-color: var(--bs-success);
 }
 .btn-outline-success {
-	border-color: var(--bs-success);
-	color: var(--bs-success);
+  border-color: var(--bs-success);
+  color: var(--bs-success);
 }
 
 .btn-check:checked + .btn-outline-success {
-	color: #fff
+  color: #fff;
 }
 
 .btn {
-	transition: none
+  transition: none;
 }
 .btn-outline-success:hover,
 .btn-outline-primary:hover,
@@ -28,55 +28,55 @@
 .btn-outline-warning:hover,
 .btn-outline-info:hover,
 .btn-outline-light:hover,
-.btn-outline-dark:hover  {
-	background-color: inherit;
-	border-color: inherit;
+.btn-outline-dark:hover {
+  background-color: inherit;
+  border-color: inherit;
 }
 .btn-outline-success:hover {
-	color: var(--bs-success)
+  color: var(--bs-success);
 }
 .btn-outline-primary:hover {
-	color: var(--bs-primary)
+  color: var(--bs-primary);
 }
 .btn-outline-secondary:hover {
-	color: var(--bs-secondary)
+  color: var(--bs-secondary);
 }
 .btn-outline-danger:hover {
-	color: var(--bs-danger)
+  color: var(--bs-danger);
 }
 .btn-outline-warning:hover {
-	color: var(--bs-warning)
+  color: var(--bs-warning);
 }
 .btn-outline-info:hover {
-	color: var(--bs-info)
+  color: var(--bs-info);
 }
 .btn-outline-light:hover {
-	color: var(--bs-light)
+  color: var(--bs-light);
 }
 .btn-outline-dark:hover {
-	color: var(--bs-dark)
+  color: var(--bs-dark);
 }
 
 .list-group-item {
-	background-color: var(--bs-body-bg);
-	color: var(--bs-body-color);
-	border: .5px solid rgba(140, 130, 115, 0.13);
+  background-color: var(--bs-body-bg);
+  color: var(--bs-body-color);
+  border: 0.5px solid rgba(140, 130, 115, 0.13);
 }
 
 .list-group-item:hover {
-	filter: brightness(200%)
+  filter: brightness(200%);
 }
 
 .pointer {
-	cursor: pointer;
+  cursor: pointer;
 }
 label {
-	color: var(--bs-body-bg)
+  color: var(--bs-body-bg);
 }
 .light {
-	color: var(--bs-body-color)
+  color: var(--bs-body-color);
 }
 .monospace {
-	font-family: 'Courier New', Courier, monospace;
-	font-weight: 700;
+  font-family: "Courier New", Courier, monospace;
+  font-weight: 700;
 }

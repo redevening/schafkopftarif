@@ -12,7 +12,6 @@ It automatically aggregates current earnings for each player.
   <img src="/docs/play.png" width="100" />
 </p>
 
-
 ## Technology
 
 - The App is built using [SVELTE](https://svelte.dev/) as frontend framework.
@@ -21,5 +20,6 @@ It automatically aggregates current earnings for each player.
 - The app can be installed as Progressive Web App on Android and iOS directly from the browser
 
 ## Building
+
 - To build the app you need a valid firebase config with API Key, etc.
 - You can put them in a `.env` file. They are used in `src/main.js`
