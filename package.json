@@ -7,11 +7,13 @@
     "dev": "rollup -c -w",
     "start": "sirv public --no-clear --single",
     "format": "prettier -w '**'",
+    "lint": "eslint --fix src/** public/sw.js ",
     "prepare": "husky install"
   },
   "lint-staged": {
-    "src/**/*.{js}": [
-      "npm run format"
+    "src/**/*.js": [
+      "eslint --fix",
+      "prettier -w"
     ]
   },
   "devDependencies": {
@@ -19,6 +21,8 @@
     "@rollup/plugin-node-resolve": "^11.0.0",
     "@rollup/plugin-replace": "^3.0.0",
     "dotenv": "^10.0.0",
+    "eslint": "^8.7.0",
+    "eslint-plugin-svelte3": "^3.4.0",
     "husky": "^7.0.4",
     "prettier": "^2.5.1",
     "prettier-plugin-svelte": "^2.6.0",
