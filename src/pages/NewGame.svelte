@@ -1,68 +1,68 @@
 <script>
-  import { createGameDocument } from "../common/db";
-  import router from "page";
+  import { createGameDocument } from '../common/db'
+  import router from 'page'
   const G1 = [
-    "Zillertaler",
-    "Alderstätter",
-    "Biertrinker",
-    "Sauspiel",
-    "Schmusi",
-    "Mercedeshasser",
-    "Football",
-    "Grisgram",
-    "Chai-Latte",
-    "Cappocino",
-    "Herzbuben",
-    "Bauhaus",
-    "Armuts",
-    "Links-Grün",
-  ];
+    'Zillertaler',
+    'Alderstätter',
+    'Biertrinker',
+    'Sauspiel',
+    'Schmusi',
+    'Mercedeshasser',
+    'Football',
+    'Grisgram',
+    'Chai-Latte',
+    'Cappocino',
+    'Herzbuben',
+    'Bauhaus',
+    'Armuts',
+    'Links-Grün',
+  ]
   const G2 = [
-    "schwubsis",
-    "heizungsbauern",
-    "kartler",
-    "freunde",
-    "spezis",
-    "audischrauber",
-    "schwurbler",
-    "vampirjaga",
-    "säufer",
-    "versifften",
-    "Identitären",
-  ];
+    'schwubsis',
+    'heizungsbauern',
+    'kartler',
+    'freunde',
+    'spezis',
+    'audischrauber',
+    'schwurbler',
+    'vampirjaga',
+    'säufer',
+    'versifften',
+    'Identitären',
+  ]
   const NAMES = [
-    "Ade",
-    "Anderl",
-    "Beda",
-    "Done",
-    "Franz",
-    "Schos",
-    "Lenzi",
-    "Wast",
-    "Xare",
-    "Babett",
-    "Betti",
-    "Anni",
-    "Evi",
-    "Gerta",
-    "Kathi",
-    "Magda",
-    "Reserl",
-    "Sigi",
-    "Vroni",
-    "Zenze",
-  ];
+    'Ade',
+    'Anderl',
+    'Beda',
+    'Done',
+    'Franz',
+    'Schos',
+    'Lenzi',
+    'Wast',
+    'Xare',
+    'Babett',
+    'Betti',
+    'Anni',
+    'Evi',
+    'Gerta',
+    'Kathi',
+    'Magda',
+    'Reserl',
+    'Sigi',
+    'Vroni',
+    'Zenze',
+  ]
   function randomName() {
-    const rnd = NAMES[Math.floor(Math.random() * NAMES.length)];
-    NAMES.splice(NAMES.indexOf(rnd), 1);
-    return rnd;
+    const rnd = NAMES[Math.floor(Math.random() * NAMES.length)]
+    NAMES.splice(NAMES.indexOf(rnd), 1)
+    return rnd
   }
   function randomGroup() {
-    const g1 = G1[Math.floor(Math.random() * G1.length)];
-    G1.splice(G1.indexOf(g1), 1);
-    const g2 = G2[Math.floor(Math.random() * G2.length)];
-    G2.splice(G2.indexOf(g2), 1);
-    return `${g1}${g2}`;
+    const g1 = G1[Math.floor(Math.random() * G1.length)]
+    G1.splice(G1.indexOf(g1), 1)
+    const g2 = G2[Math.floor(Math.random() * G2.length)]
+    G2.splice(G2.indexOf(g2), 1)
+    return `${g1}${g2}`
   }
 
   let game = {
@@ -83,11 +83,11 @@
     solo: 50,
     extra: 10,
     dealer: 1,
-  };
+  }
 
   async function startRound() {
-    await createGameDocument(game);
-    router(`/`);
+    await createGameDocument(game)
+    router(`/`)
   }
 </script>
 
@@ -109,16 +109,14 @@
           src="https://avatars.dicebear.com/api/adventurer/{game.p1
             .name}-image.svg"
           alt="avatar"
-          height="60px"
-        />
+          height="60px" />
       </div>
       <div class="form-floating col-sm-6">
         <input
           class="form-control"
           id="p1"
           bind:value={game.p1.name}
-          required
-        />
+          required />
         <label for="p1">Spieler 1</label>
       </div>
     </div>
@@ -128,16 +126,14 @@
           src="https://avatars.dicebear.com/api/adventurer/{game.p2
             .name}-image.svg"
           alt="avatar"
-          height="60px"
-        />
+          height="60px" />
       </div>
       <div class="form-floating col-sm-6">
         <input
           class="form-control"
           id="p2"
           bind:value={game.p2.name}
-          required
-        />
+          required />
         <label for="p2">Spieler 2</label>
       </div>
     </div>
@@ -147,16 +143,14 @@
           src="https://avatars.dicebear.com/api/adventurer/{game.p3
             .name}-image.svg"
           alt="avatar"
-          height="60px"
-        />
+          height="60px" />
       </div>
       <div class="form-floating col-sm-6">
         <input
           class="form-control"
           id="p3"
           bind:value={game.p3.name}
-          required
-        />
+          required />
         <label for="p3">Spieler 3</label>
       </div>
     </div>
@@ -166,16 +160,14 @@
           src="https://avatars.dicebear.com/api/adventurer/{game.p4
             .name}-image.svg"
           alt="avatar"
-          height="60px"
-        />
+          height="60px" />
       </div>
       <div class="form-floating col-sm-6">
         <input
           class="form-control"
           id="p4"
           bind:value={game.p4.name}
-          required
-        />
+          required />
         <label for="p4">Spieler 4</label>
       </div>
     </div>
@@ -192,8 +184,7 @@
           class="form-control"
           bind:value={game.sauspiel}
           type="number"
-          required
-        />
+          required />
       </div>
     </div>
     <div class="row my-2">
@@ -206,8 +197,7 @@
           class="form-control"
           bind:value={game.solo}
           type="number"
-          required
-        />
+          required />
       </div>
     </div>
     <div class="row my-2">
@@ -220,14 +210,12 @@
           class="form-control"
           bind:value={game.extra}
           type="number"
-          required
-        />
+          required />
       </div>
     </div>
     <hr />
 
     <button type="submit" class="btn btn-lg btn-success my-4"
-      >Runde starten</button
-    >
+      >Runde starten</button>
   </div>
 </form>

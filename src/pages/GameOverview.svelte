@@ -1,43 +1,43 @@
 <script>
-  import router from "page";
-  import { onMount, onDestroy } from "svelte";
+  import router from 'page'
+  import { onMount, onDestroy } from 'svelte'
   import {
     emptyGame,
     emptyPlay,
     calculateEarningsForPlayer,
-  } from "../common/game";
+  } from '../common/game'
   import {
     fetchGameDocumentRealtime,
     fetchPlayDocumentsRealtime,
     unsubscribe,
     createPlayDocument,
     updateGameDocument,
-  } from "../common/db";
+  } from '../common/db'
 
-  export let params;
+  export let params
 
-  let game = emptyGame;
-  let plays = [];
+  let game = emptyGame
+  let plays = []
   $: orderedPlays = [...plays].sort(
     (a, b) => (a === null) - (b === null) || b.created - a.created
-  );
-  $: p1Earnings = formatEarnings(game.p1, plays);
-  $: p2Earnings = formatEarnings(game.p2, plays);
-  $: p3Earnings = formatEarnings(game.p3, plays);
-  $: p4Earnings = formatEarnings(game.p4, plays);
-  $: dealerName = game[`p${game.dealer}`].name;
+  )
+  $: p1Earnings = formatEarnings(game.p1, plays)
+  $: p2Earnings = formatEarnings(game.p2, plays)
+  $: p3Earnings = formatEarnings(game.p3, plays)
+  $: p4Earnings = formatEarnings(game.p4, plays)
+  $: dealerName = game[`p${game.dealer}`].name
 
   onMount(() => {
-    fetchGameDocumentRealtime(params.id, (gameData) => (game = gameData));
-    fetchPlayDocumentsRealtime(params.id, (playsData) => (plays = playsData));
-  });
-  onDestroy(() => unsubscribe());
+    fetchGameDocumentRealtime(params.id, (gameData) => (game = gameData))
+    fetchPlayDocumentsRealtime(params.id, (playsData) => (plays = playsData))
+  })
+  onDestroy(() => unsubscribe())
 
   function formatEarnings(player, plays) {
-    const earnings = calculateEarningsForPlayer(player, plays);
-    const sign = earnings > 0 ? "+" : "-";
-    const padded = ("" + Math.abs(earnings)).padStart(5, "\u00A0");
-    return `${sign} ${padded}`;
+    const earnings = calculateEarningsForPlayer(player, plays)
+    const sign = earnings > 0 ? '+' : '-'
+    const padded = ('' + Math.abs(earnings)).padStart(5, '\u00A0')
+    return `${sign} ${padded}`
   }
 
   async function skipPlay() {
@@ -46,16 +46,16 @@
       ...emptyPlay,
       gameId: params.id,
       isSkip: true,
-    };
-    await createPlayDocument(skip);
+    }
+    await createPlayDocument(skip)
 
     // Set dealer to next player
-    const dealer = (game.dealer % 4) + 1;
-    await updateGameDocument(game.id, { dealer: dealer });
+    const dealer = (game.dealer % 4) + 1
+    await updateGameDocument(game.id, { dealer: dealer })
   }
 
   function newPlay() {
-    router(`/game/${params.id}/play`);
+    router(`/game/${params.id}/play`)
   }
 </script>
 
@@ -107,13 +107,11 @@
   <div class="row align-items-center">
     <div class="col-8 d-flex justify-content-end">
       <button class="btn btn-lg btn-success" on:click={newPlay}
-        >Spiel eintragen</button
-      >
+        >Spiel eintragen</button>
     </div>
     <div class="col-4  d-flex justify-content-end">
       <button class="btn btn-outline-danger" on:click={skipPlay}
-        >Zamschmeißn</button
-      >
+        >Zamschmeißn</button>
     </div>
   </div>
   <hr />
@@ -123,23 +121,22 @@
   {#each orderedPlays as play}
     <div class="row justify-content-between text-center fs-6 px-1">
       <div class="col-3 border">
-        {play.isSkip ? "Zamgschmissn" : play.isSolo ? "Solo" : "Sauspiel"}
+        {play.isSkip ? 'Zamgschmissn' : play.isSolo ? 'Solo' : 'Sauspiel'}
       </div>
       <div class="col-4 border">
         {#if !play.isSkip}
-          {play.p1 ? play.p1.name : ""}
-          {!play.isSolo ? "+" : ""}
-          {play.p2 ? play.p2.name : ""}
+          {play.p1 ? play.p1.name : ''}
+          {!play.isSolo ? '+' : ''}
+          {play.p2 ? play.p2.name : ''}
         {/if}
       </div>
       <div class="col-5 border">
         {#if !play.isSkip}
           <span class="monospace"
-            >{play.isSolo ? "3x " : "\u00A0\u00A0\u00A0"}{play.isWon
-              ? "+"
-              : "-"}
-            {Math.abs(play.price).toString().padStart(3, "\u00A0")}</span
-          > P
+            >{play.isSolo ? '3x ' : '\u00A0\u00A0\u00A0'}{play.isWon
+              ? '+'
+              : '-'}
+            {Math.abs(play.price).toString().padStart(3, '\u00A0')}</span> P
         {/if}
       </div>
     </div>
