@@ -4,6 +4,7 @@
 .env
 .gitignore
 .prettierignore
+.editorconfig
 package-lock.json
 
 /docs/

@@ -7,9 +7,6 @@
   export let yAxis = [[]]
   export let type = 'line'
 
-  export let width = 800
-  export let height = 800
-
   let canvas, chart
 
   export const CHART_COLORS = {
