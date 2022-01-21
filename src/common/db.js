@@ -84,6 +84,10 @@ async function fetchPlayDocumentsRealtime(gameId, updateCallback) {
   subscriptions.push(unsubscribe)
 }
 
+async function deletePlayDocument(id) {
+  await deleteDoc(doc(db(), 'plays', id))
+}
+
 export {
   createGameDocument,
   deleteGameDocument,
@@ -93,4 +97,5 @@ export {
   unsubscribe,
   updateGameDocument,
   createPlayDocument,
+  deletePlayDocument,
 }
