@@ -152,7 +152,7 @@
   {#each descOrderedPlays as play, i}
     <div class="row justify-content-between text-center fs-6 px-1">
       <div class="col-3 border text-truncate">
-        {play.isSkip ? 'Zamgschmissn' : play.isSolo ? 'Solo' : 'Sauspiel'}
+        {play.isSkip ? 'Nix' : play.isSolo ? 'Solo' : 'Sauspiel'}
       </div>
       <div class="col-4 border">
         {#if !play.isSkip}
