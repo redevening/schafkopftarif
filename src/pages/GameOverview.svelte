@@ -13,6 +13,7 @@
     createPlayDocument,
     updateGameDocument,
   } from '../common/db'
+  import Chart from "../components/Chart.svelte"
 
   export let params
 
@@ -21,10 +22,17 @@
   $: orderedPlays = [...plays].sort(
     (a, b) => (a === null) - (b === null) || b.created - a.created
   )
-  $: p1Earnings = formatEarnings(game.p1, plays)
-  $: p2Earnings = formatEarnings(game.p2, plays)
-  $: p3Earnings = formatEarnings(game.p3, plays)
-  $: p4Earnings = formatEarnings(game.p4, plays)
+
+  $: p1Earnings = calculateEarningsForPlayer(game.p1, plays)
+  $: p2Earnings = calculateEarningsForPlayer(game.p2, plays)
+  $: p3Earnings = calculateEarningsForPlayer(game.p3, plays)
+  $: p4Earnings = calculateEarningsForPlayer(game.p4, plays)
+
+
+  $: p1EarningsStr = formatEarnings(p1Earnings[plays.length-1])
+  $: p2EarningsStr = formatEarnings(p2Earnings[plays.length-1])
+  $: p3EarningsStr = formatEarnings(p3Earnings[plays.length-1])
+  $: p4EarningsStr = formatEarnings(p4Earnings[plays.length-1])
   $: dealerName = game[`p${game.dealer}`].name
 
   onMount(() => {
@@ -33,8 +41,7 @@
   })
   onDestroy(() => unsubscribe())
 
-  function formatEarnings(player, plays) {
-    const earnings = calculateEarningsForPlayer(player, plays)
+  function formatEarnings(earnings) {
     const sign = earnings > 0 ? '+' : '-'
     const padded = ('' + Math.abs(earnings)).padStart(5, '\u00A0')
     return `${sign} ${padded}`
@@ -61,6 +68,14 @@
 
 <h1 class="my-4">{game.name}</h1>
 
+
+<div class="container">
+  <Chart
+    labels={[game.p1.name, game.p2.name, game.p3.name, game.p4.name]}
+    xAxis={[...plays.keys()]}
+    yAxis={[p1Earnings, p2Earnings, p3Earnings, p4Earnings]}/>
+</div>
+
 <div class="container text-start text-nowrap lead">
   <h2>Spieler:</h2>
 
@@ -69,7 +84,7 @@
       <span>- {game.p1.name}:</span>
     </div>
     <div class="col text-end">
-      <span class="monospace">{p1Earnings}</span> Punkte
+      <span class="monospace">{p1EarningsStr}</span> Punkte
     </div>
   </div>
 
@@ -78,7 +93,7 @@
       <span>- {game.p2.name}:</span>
     </div>
     <div class="col text-end">
-      <span class="monospace">{p2Earnings}</span> Punkte
+      <span class="monospace">{p2EarningsStr}</span> Punkte
     </div>
   </div>
 
@@ -87,7 +102,7 @@
       <span>- {game.p3.name}:</span>
     </div>
     <div class="col text-end">
-      <span class="monospace">{p3Earnings}</span> Punkte
+      <span class="monospace">{p3EarningsStr}</span> Punkte
     </div>
   </div>
 
@@ -96,7 +111,7 @@
       <span>- {game.p4.name}:</span>
     </div>
     <div class="col text-end">
-      <span class="monospace">{p4Earnings}</span> Punkte
+      <span class="monospace">{p4EarningsStr}</span> Punkte
     </div>
   </div>
 
