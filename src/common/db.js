@@ -25,21 +25,21 @@ function unsubscribe() {
 // Games
 
 function fetchGameDocumentsRealtime(updateCallback) {
-  const unsubscribe = onSnapshot(collection(db(), 'games'), (response) => {
+  const callb = onSnapshot(collection(db(), 'games'), (response) => {
     const games = response.docs.map((x) =>
       x.data({ serverTimestamps: 'estimate' })
     )
     updateCallback(games)
   })
-  subscriptions.push(unsubscribe)
+  subscriptions.push(callb)
 }
 
 function fetchGameDocumentRealtime(id, updateCallback) {
-  const unsubscribe = onSnapshot(doc(db(), 'games', id), (response) => {
+  const callb = onSnapshot(doc(db(), 'games', id), (response) => {
     const game = response.data()
     updateCallback(game)
   })
-  subscriptions.push(unsubscribe)
+  subscriptions.push(callb)
 }
 
 async function deleteGameDocument(id) {
@@ -75,13 +75,13 @@ async function fetchPlayDocumentsRealtime(gameId, updateCallback) {
     collection(db(), 'plays'),
     where('gameId', '==', gameId)
   )
-  const unsubscribe = onSnapshot(requestQuery, (response) => {
+  const callb = onSnapshot(requestQuery, (response) => {
     const plays = response.docs.map((x) =>
       x.data({ serverTimestamps: 'estimate' })
     )
     updateCallback(plays)
   })
-  subscriptions.push(unsubscribe)
+  subscriptions.push(callb)
 }
 
 async function deletePlayDocument(id) {

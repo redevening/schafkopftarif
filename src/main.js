@@ -4,7 +4,7 @@ import App from './App.svelte'
 window.onload = () => {
   'use strict'
 
-  if ('serviceWorker' in navigator && true) {
+  if ('serviceWorker' in navigator) {
     navigator.serviceWorker.register('./sw.js')
   }
 }
