@@ -20,14 +20,17 @@
 
   let game = emptyGame
   let plays = []
-  $: orderedPlays = [...plays].sort(
+  $: descOrderedPlays = [...plays].sort(
     (a, b) => (a === null) - (b === null) || b.created - a.created
   )
+  $: ascOrderedPlays = [...plays].sort(
+    (a, b) => (a === null) - (b === null) || a.created - b.created
+  )
 
-  $: p1Earnings = calculateEarningsForPlayer(game.p1, plays)
-  $: p2Earnings = calculateEarningsForPlayer(game.p2, plays)
-  $: p3Earnings = calculateEarningsForPlayer(game.p3, plays)
-  $: p4Earnings = calculateEarningsForPlayer(game.p4, plays)
+  $: p1Earnings = calculateEarningsForPlayer(game.p1, ascOrderedPlays)
+  $: p2Earnings = calculateEarningsForPlayer(game.p2, ascOrderedPlays)
+  $: p3Earnings = calculateEarningsForPlayer(game.p3, ascOrderedPlays)
+  $: p4Earnings = calculateEarningsForPlayer(game.p4, ascOrderedPlays)
 
   $: p1EarningsStr = formatEarnings(p1Earnings[p1Earnings.length - 1])
   $: p2EarningsStr = formatEarnings(p2Earnings[p2Earnings.length - 1])
@@ -48,13 +51,6 @@
   }
 
   async function skipPlay() {
-    const isConfirmed = window.confirm(
-      `Willst du das letzte Spiel zusammenwerfen?`
-    )
-    if (!isConfirmed) {
-      return
-    }
-
     // Create skip game
     const skip = {
       ...emptyPlay,
@@ -89,7 +85,7 @@
 <div class="container">
   <Chart
     labels={[game.p1.name, game.p2.name, game.p3.name, game.p4.name]}
-    xAxis={[0, ...Array.from({length: plays.length}, (_, i) => i + 1)]}
+    xAxis={[0, ...Array.from({length: descOrderedPlays.length}, (_, i) => i + 1)]}
     yAxis={[p1Earnings, p2Earnings, p3Earnings, p4Earnings]} />
 </div>
 
@@ -150,7 +146,7 @@
 
   <h2>Spiele:</h2>
 
-  {#each orderedPlays as play, i}
+  {#each descOrderedPlays as play, i}
     <div class="row justify-content-between text-center fs-6 px-1">
       <div class="col-3 border">
         {play.isSkip ? 'Zamgschmissn' : play.isSolo ? 'Solo' : 'Sauspiel'}

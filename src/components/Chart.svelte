@@ -1,6 +1,6 @@
 <script>
   import Chart from 'chart.js/auto'
-  import { beforeUpdate, onMount } from 'svelte'
+  import { afterUpdate, beforeUpdate, onMount } from 'svelte'
 
   export let labels = []
   export let xAxis = []
@@ -19,11 +19,12 @@
     purple: 'rgb(153, 102, 255)',
   }
 
+  let showGradient = false
   $: greenGradient = function () {
     let ctx = canvas.getContext('2d')
     const gradient = ctx.createLinearGradient(0, 0, 0, canvas.height)
     gradient.addColorStop(0, 'lawngreen')
-    gradient.addColorStop(0.6, '#131516')
+    gradient.addColorStop(0.7, '#131516')
     gradient.addColorStop(1, '#131516')
     return gradient
   }
@@ -32,7 +33,7 @@
     let ctx = canvas.getContext('2d')
     const gradient = ctx.createLinearGradient(0, 0, 0, canvas.height)
     gradient.addColorStop(0, '#131516')
-    gradient.addColorStop(0.5, '#131516')
+    gradient.addColorStop(0.3, '#131516')
     gradient.addColorStop(1, 'red')
     return gradient
   }
@@ -45,8 +46,7 @@
     borderWidth: 2,
     pointRadius: 0,
     // lighten color with gradient instead of alpha channel to not have overlapping transparency
-    //fill: { above: greenGradient, below: redGradient, target: { value: 0 } },
-    fill: false,
+    fill: showGradient ? { above: greenGradient, below: redGradient, target: { value: 0 } } : false,
   }))
 
   $: data = {
@@ -63,6 +63,9 @@
         intersect: false,
         mode: 'index',
       },
+      animation: {
+        duration: 0
+      },
       plugins: {
         tooltip: {
           callbacks: {
@@ -75,10 +78,10 @@
             },
           },
         },
-        /*         filler: {
+        filler: showGradient ? {
           propagate: true,
-          drawTime: 'beforeDatasetsDraw',
-        }, */
+          drawTime: 'beforeDraw',
+        } : undefined,
       },
     },
   }
@@ -87,7 +90,7 @@
     chart = new Chart(canvas, config)
   })
 
-  beforeUpdate(() => {
+  afterUpdate(() => {
     if (!chart) return
 
     chart.data = data
@@ -95,4 +98,4 @@
   })
 </script>
 
-<canvas bind:this={canvas} />
+<canvas bind:this={canvas} on:click="{() => showGradient = !showGradient}"/>
