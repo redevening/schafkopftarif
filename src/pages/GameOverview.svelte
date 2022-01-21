@@ -11,9 +11,10 @@
     fetchPlayDocumentsRealtime,
     unsubscribe,
     createPlayDocument,
+    deletePlayDocument,
     updateGameDocument,
   } from '../common/db'
-  import Chart from "../components/Chart.svelte"
+  import Chart from '../components/Chart.svelte'
 
   export let params
 
@@ -28,11 +29,10 @@
   $: p3Earnings = calculateEarningsForPlayer(game.p3, plays)
   $: p4Earnings = calculateEarningsForPlayer(game.p4, plays)
 
-
-  $: p1EarningsStr = formatEarnings(p1Earnings[plays.length-1])
-  $: p2EarningsStr = formatEarnings(p2Earnings[plays.length-1])
-  $: p3EarningsStr = formatEarnings(p3Earnings[plays.length-1])
-  $: p4EarningsStr = formatEarnings(p4Earnings[plays.length-1])
+  $: p1EarningsStr = formatEarnings(p1Earnings[plays.length - 1])
+  $: p2EarningsStr = formatEarnings(p2Earnings[plays.length - 1])
+  $: p3EarningsStr = formatEarnings(p3Earnings[plays.length - 1])
+  $: p4EarningsStr = formatEarnings(p4Earnings[plays.length - 1])
   $: dealerName = game[`p${game.dealer}`].name
 
   onMount(() => {
@@ -48,6 +48,11 @@
   }
 
   async function skipPlay() {
+    const isConfirmed = window.confirm(`Willst du das letzte Spiel zusammenwerfen?`)
+    if (!isConfirmed) {
+      return
+    }
+
     // Create skip game
     const skip = {
       ...emptyPlay,
@@ -61,6 +66,17 @@
     await updateGameDocument(game.id, { dealer: dealer })
   }
 
+  async function deletePlay(play) {
+    const isConfirmed = window.confirm(`Willst du das letzte Spiel löschen?`)
+    if (isConfirmed) {
+      await deletePlayDocument(play.id)
+
+      // Set dealer to previous player
+      const dealer = ((game.dealer - 2) % 4 + 4) % 4 + 1 
+      await updateGameDocument(game.id, { dealer: dealer })
+    }
+  }
+
   function newPlay() {
     router(`/game/${params.id}/play`)
   }
@@ -68,12 +84,11 @@
 
 <h1 class="my-4">{game.name}</h1>
 
-
 <div class="container">
   <Chart
     labels={[game.p1.name, game.p2.name, game.p3.name, game.p4.name]}
     xAxis={[...plays.keys()]}
-    yAxis={[p1Earnings, p2Earnings, p3Earnings, p4Earnings]}/>
+    yAxis={[p1Earnings, p2Earnings, p3Earnings, p4Earnings]} />
 </div>
 
 <div class="container text-start text-nowrap lead">
@@ -133,7 +148,7 @@
 
   <h2>Spiele:</h2>
 
-  {#each orderedPlays as play}
+  {#each orderedPlays as play, i}
     <div class="row justify-content-between text-center fs-6 px-1">
       <div class="col-3 border">
         {play.isSkip ? 'Zamgschmissn' : play.isSolo ? 'Solo' : 'Sauspiel'}
@@ -145,14 +160,24 @@
           {play.p2 ? play.p2.name : ''}
         {/if}
       </div>
-      <div class="col-5 border">
-        {#if !play.isSkip}
-          <span class="monospace"
-            >{play.isSolo ? '3x ' : '\u00A0\u00A0\u00A0'}{play.isWon
-              ? '+'
-              : '-'}
-            {Math.abs(play.price).toString().padStart(3, '\u00A0')}</span> P
-        {/if}
+      <div class="col-5 d-flex border">
+        <div class="col-11">
+          {#if !play.isSkip}
+            <span class="monospace"
+              >{play.isSolo ? '3x ' : '\u00A0\u00A0\u00A0'}{play.isWon
+                ? '+'
+                : '-'}
+              {Math.abs(play.price).toString().padStart(3, '\u00A0')}</span> P
+          {/if}
+        </div>
+
+        <div class="col-1">
+          {#if i === 0}
+            <button
+              class="btn btn-sm btn-outline-danger"
+              on:click={() => deletePlay(play)}>X</button>
+          {/if}
+        </div>
       </div>
     </div>
   {/each}
