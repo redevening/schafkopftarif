@@ -48,7 +48,9 @@
   }
 
   async function skipPlay() {
-    const isConfirmed = window.confirm(`Willst du das letzte Spiel zusammenwerfen?`)
+    const isConfirmed = window.confirm(
+      `Willst du das letzte Spiel zusammenwerfen?`
+    )
     if (!isConfirmed) {
       return
     }
@@ -72,7 +74,7 @@
       await deletePlayDocument(play.id)
 
       // Set dealer to previous player
-      const dealer = ((game.dealer - 2) % 4 + 4) % 4 + 1 
+      const dealer = ((((game.dealer - 2) % 4) + 4) % 4) + 1
       await updateGameDocument(game.id, { dealer: dealer })
     }
   }
