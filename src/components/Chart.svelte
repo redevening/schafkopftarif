@@ -13,13 +13,31 @@
   let canvas, chart
 
   export const CHART_COLORS = {
-    red: 'rgb(255, 99, 132)',
     blue: 'rgb(54, 162, 235)',
     orange: 'rgb(255, 159, 64)',
-    green: 'rgb(75, 192, 192)',
+    grey: 'rgb(201, 203, 207)',
     yellow: 'rgb(255, 205, 86)',
     purple: 'rgb(153, 102, 255)',
-    grey: 'rgb(201, 203, 207)',
+    red: 'rgb(255, 99, 132)',
+    green: 'rgb(75, 192, 192)',
+  }
+
+  $: greenGradient = function () {
+    let ctx = canvas.getContext('2d')
+    const gradient = ctx.createLinearGradient(0, 0, 0, canvas.height)
+    gradient.addColorStop(0, 'lawngreen')
+    gradient.addColorStop(0.6, '#131516')
+    gradient.addColorStop(1, '#131516')
+    return gradient
+  }
+
+  $: redGradient = function () {
+    let ctx = canvas.getContext('2d')
+    const gradient = ctx.createLinearGradient(0, 0, 0, canvas.height)
+    gradient.addColorStop(0, '#131516')
+    gradient.addColorStop(0.5, '#131516')
+    gradient.addColorStop(1, 'red')
+    return gradient
   }
 
   $: datasets = labels.map((label, i) => ({
@@ -29,6 +47,8 @@
     borderColor: Object.values(CHART_COLORS)[i],
     borderWidth: 2,
     pointRadius: 0,
+    // lighten color with gradient instead of alpha channel to not have overlapping transparency
+    fill: { above: greenGradient, below: redGradient, target: { value: 0 } },
   }))
 
   $: data = {
@@ -54,9 +74,12 @@
             },
             label: function (ctx) {
               return `${ctx.dataset.label}: ${ctx.formattedValue} P`
-              
-            }
+            },
           },
+        },
+        filler: {
+          propagate: false,
+          drawTime: 'beforeDatasetsDraw',
         },
       },
     },
