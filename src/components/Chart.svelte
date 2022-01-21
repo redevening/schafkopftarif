@@ -1,6 +1,6 @@
 <script>
   import Chart from 'chart.js/auto'
-  import { afterUpdate, beforeUpdate, onMount } from 'svelte'
+  import { afterUpdate, onMount } from 'svelte'
 
   export let labels = []
   export let xAxis = []
@@ -46,7 +46,9 @@
     borderWidth: 2,
     pointRadius: 0,
     // lighten color with gradient instead of alpha channel to not have overlapping transparency
-    fill: showGradient ? { above: greenGradient, below: redGradient, target: { value: 0 } } : false,
+    fill: showGradient
+      ? { above: greenGradient, below: redGradient, target: { value: 0 } }
+      : false,
   }))
 
   $: data = {
@@ -64,7 +66,7 @@
         mode: 'index',
       },
       animation: {
-        duration: 0
+        duration: 0,
       },
       plugins: {
         tooltip: {
@@ -78,10 +80,12 @@
             },
           },
         },
-        filler: showGradient ? {
-          propagate: true,
-          drawTime: 'beforeDraw',
-        } : undefined,
+        filler: showGradient
+          ? {
+              propagate: true,
+              drawTime: 'beforeDraw',
+            }
+          : undefined,
       },
     },
   }
@@ -98,4 +102,4 @@
   })
 </script>
 
-<canvas bind:this={canvas} on:click="{() => showGradient = !showGradient}"/>
+<canvas bind:this={canvas} on:click={() => (showGradient = !showGradient)} />

@@ -85,7 +85,10 @@
 <div class="container">
   <Chart
     labels={[game.p1.name, game.p2.name, game.p3.name, game.p4.name]}
-    xAxis={[0, ...Array.from({length: descOrderedPlays.length}, (_, i) => i + 1)]}
+    xAxis={[
+      0,
+      ...Array.from({ length: descOrderedPlays.length }, (_, i) => i + 1),
+    ]}
     yAxis={[p1Earnings, p2Earnings, p3Earnings, p4Earnings]} />
 </div>
 
@@ -148,7 +151,7 @@
 
   {#each descOrderedPlays as play, i}
     <div class="row justify-content-between text-center fs-6 px-1">
-      <div class="col-3 border">
+      <div class="col-3 border text-truncate">
         {play.isSkip ? 'Zamgschmissn' : play.isSolo ? 'Solo' : 'Sauspiel'}
       </div>
       <div class="col-4 border">
@@ -159,17 +162,18 @@
         {/if}
       </div>
       <div class="col-5 d-flex border">
-        <div class="col-11">
+        <div class="col-10 text-end">
           {#if !play.isSkip}
-            <span class="monospace"
-              >{play.isSolo ? '3x ' : '\u00A0\u00A0\u00A0'}{play.isWon
-                ? '+'
-                : '-'}
-              {Math.abs(play.price).toString().padStart(3, '\u00A0')}</span> P
+            <span class="monospace d-inline-block">
+              {play.isSolo ? '3x ' : '\u00A0\u00A0'}
+              {play.isWon ? '+' : '-'}
+              {Math.abs(play.price).toString().padStart(3, '\u00A0')}
+              P
+            </span>
           {/if}
         </div>
 
-        <div class="col-1">
+        <div class="col-2 m-1">
           {#if i === 0}
             <button
               class="btn btn-sm btn-outline-danger"
