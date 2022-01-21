@@ -1,6 +1,5 @@
 <script>
   import Chart from 'chart.js/auto'
-  import { emptyGame } from '../common/game'
   import { beforeUpdate, onMount } from 'svelte'
 
   export let labels = []
@@ -11,7 +10,7 @@
   export let width = 800
   export let height = 800
 
-  let canvas
+  let canvas, chart
 
   export const CHART_COLORS = {
     red: 'rgb(255, 99, 132)',
@@ -30,7 +29,6 @@
     borderColor: Object.values(CHART_COLORS)[i],
     borderWidth: 2,
     pointRadius: 0,
-    pointHitRadius: 20
   }))
 
   $: data = {
@@ -43,10 +41,27 @@
     data: data,
     options: {
       responsive: true,
+      interaction: {
+        intersect: false,
+        mode: 'index',
+      },
+      plugins: {
+        tooltip: {
+          callbacks: {
+            title: function (items) {
+              const n = items[0].label
+              return `Game ${n}`
+            },
+            label: function (ctx) {
+              return `${ctx.dataset.label}: ${ctx.formattedValue} P`
+              
+            }
+          },
+        },
+      },
     },
   }
 
-  let chart
   onMount(() => {
     chart = new Chart(canvas, config)
   })
@@ -59,8 +74,4 @@
   })
 </script>
 
-<div style="width: 100%; overflow-x: auto; overflow-y: hidden">
-  <div style="width: 3000px; height: 300px">
-    <canvas bind:this={canvas} height="300" width="0"></canvas>
-  </div>
-</div>
+<canvas bind:this={canvas} />
