@@ -29,10 +29,10 @@
   $: p3Earnings = calculateEarningsForPlayer(game.p3, plays)
   $: p4Earnings = calculateEarningsForPlayer(game.p4, plays)
 
-  $: p1EarningsStr = formatEarnings(p1Earnings[plays.length - 1])
-  $: p2EarningsStr = formatEarnings(p2Earnings[plays.length - 1])
-  $: p3EarningsStr = formatEarnings(p3Earnings[plays.length - 1])
-  $: p4EarningsStr = formatEarnings(p4Earnings[plays.length - 1])
+  $: p1EarningsStr = formatEarnings(p1Earnings[p1Earnings.length - 1])
+  $: p2EarningsStr = formatEarnings(p2Earnings[p2Earnings.length - 1])
+  $: p3EarningsStr = formatEarnings(p3Earnings[p3Earnings.length - 1])
+  $: p4EarningsStr = formatEarnings(p4Earnings[p4Earnings.length - 1])
   $: dealerName = game[`p${game.dealer}`].name
 
   onMount(() => {
@@ -89,7 +89,7 @@
 <div class="container">
   <Chart
     labels={[game.p1.name, game.p2.name, game.p3.name, game.p4.name]}
-    xAxis={[...plays.keys()]}
+    xAxis={[0, ...Array.from({length: plays.length}, (_, i) => i + 1)]}
     yAxis={[p1Earnings, p2Earnings, p3Earnings, p4Earnings]} />
 </div>
 
