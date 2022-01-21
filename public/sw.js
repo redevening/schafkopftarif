@@ -18,7 +18,7 @@ self.addEventListener('install', function (e) {
 
 /* Serve cached content when offline */
 self.addEventListener('fetch', function (e) {
-  if (e.request.url.contains('googleapis')) {
+  if (e.request.url.includes('googleapis')) {
     // Don't mess up firebase stuff
     return
   }

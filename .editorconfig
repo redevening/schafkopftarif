@@ -1,0 +1,5 @@
+root = true
+
+[*.{html, js, svelte}]
+indent_size = space
+indent_size = 2

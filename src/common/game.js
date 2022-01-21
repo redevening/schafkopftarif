@@ -1,15 +1,15 @@
 const emptyGame = {
   p1: {
-    name: '',
+    name: 'p1',
   },
   p2: {
-    name: '',
+    name: 'p2',
   },
   p3: {
-    name: '',
+    name: 'p3',
   },
   p4: {
-    name: '',
+    name: 'p4',
   },
   dealer: 1,
 }
@@ -47,16 +47,18 @@ function calculatePlayPrice(play) {
 }
 
 function calculateEarningsForPlayer(player, plays) {
-  return plays
-    .filter((play) => !play.isSkip)
-    .map((play) => {
-      const isPlayer =
-        play.p1?.name === player.name || play.p2?.name === player.name
-      const soloFactor = play.isSolo && isPlayer ? 3 : 1
-      const playerFactor = isPlayer ? 1 : -1
+  let result = [0]
+  let sum = 0
 
-      return soloFactor * playerFactor * play.price
-    })
-    .reduce((prev, cur) => prev + cur, 0)
+  plays.forEach((play) => {
+    const isPlayer =
+      play.p1?.name === player.name || play.p2?.name === player.name
+    const soloFactor = play.isSolo && isPlayer ? 3 : 1
+    const playerFactor = isPlayer ? 1 : -1
+
+    sum += soloFactor * playerFactor * play.price
+    result.push(sum)
+  })
+  return result
 }
 export { emptyGame, emptyPlay, calculatePlayPrice, calculateEarningsForPlayer }
