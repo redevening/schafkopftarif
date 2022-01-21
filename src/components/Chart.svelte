@@ -13,13 +13,13 @@
   let canvas, chart
 
   export const CHART_COLORS = {
+    red: 'rgb(255, 99, 132)',
     blue: 'rgb(54, 162, 235)',
     orange: 'rgb(255, 159, 64)',
+    green: 'rgb(75, 192, 192)',
     grey: 'rgb(201, 203, 207)',
     yellow: 'rgb(255, 205, 86)',
     purple: 'rgb(153, 102, 255)',
-    red: 'rgb(255, 99, 132)',
-    green: 'rgb(75, 192, 192)',
   }
 
   $: greenGradient = function () {
@@ -48,7 +48,8 @@
     borderWidth: 2,
     pointRadius: 0,
     // lighten color with gradient instead of alpha channel to not have overlapping transparency
-    fill: { above: greenGradient, below: redGradient, target: { value: 0 } },
+    //fill: { above: greenGradient, below: redGradient, target: { value: 0 } },
+    fill: false,
   }))
 
   $: data = {
@@ -77,10 +78,10 @@
             },
           },
         },
-        filler: {
-          propagate: false,
+        /*         filler: {
+          propagate: true,
           drawTime: 'beforeDatasetsDraw',
-        },
+        }, */
       },
     },
   }
