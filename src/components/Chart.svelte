@@ -102,4 +102,4 @@
   })
 </script>
 
-<canvas bind:this={canvas} on:click={() => (showGradient = !showGradient)} />
+<canvas bind:this={canvas} />
