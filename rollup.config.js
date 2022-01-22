@@ -56,7 +56,7 @@ export default {
       FIREBASE_MEASUREMENTID: JSON.stringify(
         process.env.FIREBASE_MEASUREMENTID
       ),
-      'process.env.production': production,
+      PRODUCTION: production,
     }),
 
     svelte({

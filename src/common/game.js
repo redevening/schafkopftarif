@@ -1,3 +1,7 @@
+const emptyPlayer = {
+  name: '',
+}
+
 const emptyGame = {
   p1: {
     name: 'p1',
@@ -61,4 +65,10 @@ function calculateEarningsForPlayer(player, plays) {
   })
   return result
 }
-export { emptyGame, emptyPlay, calculatePlayPrice, calculateEarningsForPlayer }
+export {
+  emptyPlayer,
+  emptyGame,
+  emptyPlay,
+  calculatePlayPrice,
+  calculateEarningsForPlayer,
+}

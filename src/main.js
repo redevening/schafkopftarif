@@ -4,7 +4,8 @@ import App from './App.svelte'
 window.onload = () => {
   'use strict'
 
-  if ('serviceWorker' in navigator) {
+  if ('serviceWorker' in navigator && PRODUCTION) {
+    // eslint-disable-line no-undef
     navigator.serviceWorker.register('./sw.js')
   }
 }

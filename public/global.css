@@ -67,6 +67,11 @@
   filter: brightness(200%);
 }
 
+.card {
+  border-color: var(--bs-body-color);
+  background-color :var(--bs-body-bg);
+}
+
 .pointer {
   cursor: pointer;
 }

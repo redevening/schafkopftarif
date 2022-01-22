@@ -29,14 +29,20 @@
     router('/game')
   }
 
+  function player() {
+    router('/player')
+  }
+
   function openGame(id) {
     router(`/game/${id}`)
   }
 </script>
 
 <h1 class="my-4">Schafkopftarif</h1>
-<button type="button" class="btn btn-success my-4" on:click={createGame}
+<button type="button" class="btn btn-success m-4" on:click={createGame}
   >Neue Runde</button>
+<button type="button" class="btn btn-info m-4" on:click={player}
+  >Spieler</button>
 <h2 class="my-4">Laufende Runden:</h2>
 <ul class="list-group">
   {#each sortedGames as game}

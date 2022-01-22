@@ -22,6 +22,26 @@ function unsubscribe() {
   subscriptions = []
 }
 
+// Players
+function fetchPlayerDocumentsRealtime(updateCallback) {
+  const callb = onSnapshot(collection(db(), 'players'), (response) => {
+    const games = response.docs.map((x) =>
+      x.data({ serverTimestamps: 'estimate' })
+    )
+    updateCallback(games)
+  })
+  subscriptions.push(callb)
+}
+
+async function createPlayerDocument(player) {
+  const newGameRef = doc(collection(db(), 'players'))
+  await setDoc(newGameRef, {
+    created: serverTimestamp(),
+    ...player,
+    id: newGameRef.id,
+  })
+}
+
 // Games
 
 function fetchGameDocumentsRealtime(updateCallback) {
@@ -89,6 +109,8 @@ async function deletePlayDocument(id) {
 }
 
 export {
+  fetchPlayerDocumentsRealtime,
+  createPlayerDocument,
   createGameDocument,
   deleteGameDocument,
   fetchGameDocumentRealtime,
