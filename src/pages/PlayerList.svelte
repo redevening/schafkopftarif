@@ -46,7 +46,7 @@
     </div>
   {/each}
 
-  <div class="card m-2 d-flex pointer sqare">
+  <div class="card m-2 d-flex pointer two-cols">
     <form on:submit|preventDefault={createPlayer}>
       <div class="form-group m-2">
         <div class="form-floating">
@@ -70,8 +70,7 @@
     display: grid;
     grid-template-columns: repeat(3, 1fr);
   }
-  .square {
-    width: 12rem;
-    height: 12rem;
+  .two-cols {
+    grid-column: span 2;
   }
 </style>
