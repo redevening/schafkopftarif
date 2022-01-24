@@ -249,7 +249,7 @@
           on:click|preventDefault={() =>
             (play.lauf = play.lauf > 0 ? play.lauf - 1 : play.lauf)}>-</button>
       </div>
-      <div class="col-2 text-center fs-3">
+      <div class="col-2 text-center fs-3 d-flex justify-content-center">
         <div class="circle">{play.lauf}</div>
       </div>
       <div class="col-5 row justify-content-start align-items-center">
@@ -268,7 +268,7 @@
             (play.klopf = play.klopf > 0 ? play.klopf - 1 : play.klopf)}
           >-</button>
       </div>
-      <div class="col-2 text-center fs-3">
+      <div class="col-2 text-center fs-3 d-flex justify-content-center">
         <div class="circle">{play.klopf}</div>
       </div>
       <div class="col-5 row justify-content-start align-items-center">
