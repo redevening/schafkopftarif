@@ -1,6 +1,20 @@
 <script>
   import { createGameDocument } from '../common/db'
   import router from 'page'
+  import { stringToColor } from '../common/util'
+
+  let players = [{
+    name: 'ONE'
+  },
+  {
+    name: 'TWO'
+  },
+  {
+    name: 'THREE'
+  },
+  {
+    name: 'FOUR'
+  }]
   const G1 = [
     'Zillertaler',
     'Alderstätter',
@@ -103,7 +117,7 @@
     <hr />
 
     <h2>Spieler</h2>
-    <div class="row justify-content-center my-2">
+    <!-- <div class="row justify-content-center my-2">
       <div class="col-2">
         <img
           src="https://avatars.dicebear.com/api/adventurer/{game.p1
@@ -170,7 +184,34 @@
           required />
         <label for="p4">Spieler 4</label>
       </div>
+    </div> -->
+
+    <div class="parent">
+      {#each players as player}
+        <div
+          class="card m-2 pointer square"
+          style="background-color: {stringToColor(
+            player.name
+          )}"
+          on:click={() => openPlayer(player)}>
+          <img
+            src="https://avatars.dicebear.com/api/adventurer/{player.name}-image.svg"
+            alt="avatar" />
+          <div class="card-body">
+            <p class="card-text fw-bold">
+              {player.name}
+            </p>
+          </div>
+        </div>
+      {/each}
     </div>
+
+
+
+
+
+
+
     <hr />
 
     <h2>Tarife</h2>
@@ -219,3 +260,10 @@
       >Runde starten</button>
   </div>
 </form>
+
+<style>
+  .parent {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+  }
+</style>
