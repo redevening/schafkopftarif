@@ -22,4 +22,5 @@ It automatically aggregates current earnings for each player.
 ## Building
 
 - To build the app you need a valid firebase config with API Key, etc.
-- You can put them in a `.env` file. They are used in `src/main.js`
+- If you don't have it create an account at the firebase [console](https://console.firebase.google.com).
+- Copy the `.env.copy` into the ``.env` file and fill it with your credentials. The variables are used in `src/main.js`

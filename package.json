@@ -5,7 +5,7 @@
   "scripts": {
     "build": "rollup -c",
     "dev": "rollup -c -w",
-    "start": "sirv public --no-clear --single",
+    "start": "sirv public --no-clear --single --port 5001",
     "format": "prettier -w '**'",
     "lint": "eslint --fix src/** public/sw.js ",
     "prepare": "husky install"
