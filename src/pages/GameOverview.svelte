@@ -50,12 +50,46 @@
     return `${sign} ${padded}`
   }
 
+  function formatType(play) {
+    switch (play.type) {
+      case 'SKIP':
+        return 'nix'
+      case 'SAU':
+        return 'Sauspiel'
+      case 'SOLO':
+        return 'Solo'
+      case 'RAMSCH':
+        return 'Ramsch'
+    }
+  }
+
+  function formatPlayPrice(play) {
+    const sign = play.isWon ? '+' : '-'
+    switch (play.type) {
+      case 'SKIP':
+        return ''
+      case 'SAU':
+        return `\u00A0\u00A0 ${sign}${Math.abs(play.price)
+          .toString()
+          .padStart(3, '\u00A0')}P`
+      case 'SOLO':
+        return `3x ${sign}${Math.abs(play.price)
+          .toString()
+          .padStart(3, '\u00A0')}P`
+      case 'RAMSCH':
+        let count = 3 + play.players.filter((p) => p?.isJungfrau).length
+        return `${count}x ${sign}${Math.abs(play.price)
+          .toString()
+          .padStart(3, '\u00A0')}P`
+    }
+  }
+
   async function skipPlay() {
     // Create skip game
     const skip = {
       ...emptyPlay,
       gameId: params.id,
-      isSkip: true,
+      type: 'SKIP',
     }
     await createPlayDocument(skip)
 
@@ -152,25 +186,20 @@
   {#each descOrderedPlays as play, i}
     <div class="row justify-content-between text-center fs-6 px-1">
       <div class="col-3 border text-truncate">
-        {play.isSkip ? 'Nix' : play.isSolo ? 'Solo' : 'Sauspiel'}
+        {formatType(play)}
       </div>
       <div class="col-4 border">
-        {#if !play.isSkip}
+        {#if !(play.type === 'SKIP')}
           {play.p1 ? play.p1.name : ''}
-          {!play.isSolo ? '+' : ''}
+          {play.type === 'SAU' ? '+' : ''}
           {play.p2 ? play.p2.name : ''}
         {/if}
       </div>
       <div class="col-5 d-flex border">
-        <div class="col-10 text-end">
-          {#if !play.isSkip}
-            <span class="monospace d-inline-block">
-              {play.isSolo ? '3x ' : '\u00A0\u00A0'}
-              {play.isWon ? '+' : '-'}
-              {Math.abs(play.price).toString().padStart(3, '\u00A0')}
-              P
-            </span>
-          {/if}
+        <div class="col-10 text-center">
+          <span class="monospace">
+            {formatPlayPrice(play)}
+          </span>
         </div>
 
         <div class="col-2 m-1">

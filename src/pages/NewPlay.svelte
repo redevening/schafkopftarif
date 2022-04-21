@@ -15,12 +15,14 @@
   let play = emptyPlay
   $: price = calculatePlayPrice(play)
   $: players = [undefined, game.p1, game.p2, game.p3, game.p4]
+  $: jungfrauCount = play.players.filter((p) => p && p.isJungfrau).length
 
   onMount(() => {
     fetchGameDocumentRealtime(params.id, (gameData) => {
       game = gameData
       play = {
         ...emptyPlay,
+        type: 'SAU',
         gameId: game.id,
         p1: game.p1,
         p2: game.p2,
@@ -33,11 +35,22 @@
   })
   onDestroy(() => unsubscribe())
 
-  function toggleIsSolo() {
-    play.isSolo = !play.isSolo
-    if (play.isSolo) {
+  function setType(type) {
+    play.type = type
+
+    if (play.type === 'SAU') {
+      play.p2 = game.p2
+    } else {
       play.p2 = null
     }
+    if (play.type === 'RAMSCH') {
+      play.isWon = false
+      play.schneider = false
+      play.schwarz = false
+      play.multiplier = 0
+      play.lauf = 0
+    }
+    play.players.forEach((x) => delete x.isJungfrau)
   }
 
   function togglePlayer(i) {
@@ -53,7 +66,7 @@
       return
     }
 
-    if (play.isSolo) {
+    if (play.type === 'SOLO' || play.type === 'RAMSCH') {
       // solo player is alone
       play.p1 = player
       play.p2 = null
@@ -70,6 +83,7 @@
       play.p1 = player
       play.p2 = null
     }
+    play.players.forEach((x) => (x.isJungfrau = false))
   }
   function toggleSchneider() {
     play.schneider = !play.schneider
@@ -87,11 +101,12 @@
 
   async function recordPlay() {
     // Check if required player count is correct
-    if (play.isSolo && ((play.p1 && play.p2) || (!play.p1 && !play.p2))) {
+    const isSolo = play.type === 'SOLO' || play.type === 'RAMSCH'
+    if (isSolo && ((play.p1 && play.p2) || (!play.p1 && !play.p2))) {
       alert('Ein Spieler beim Solo!')
       return false
     }
-    if (!play.isSolo && !(play.p1 && play.p2)) {
+    if (!isSolo && !(play.p1 && play.p2)) {
       alert('Zwei Spieler beim Sauspiel!')
       return false
     }
@@ -110,36 +125,51 @@
 
 <form on:submit|preventDefault={recordPlay}>
   <div class="container text-start my-1">
-    <div class="row justify-content-center px-2">
-      <div class="col-6 d-grid gap-2 p-0">
+    <div class="row justify-content-center">
+      <div class="col-5 d-grid gap-2 p-0">
         <input
           type="checkbox"
           class="btn-check"
           id="sauspiel"
           autocomplete="off"
-          checked={!play.isSolo}
-          on:click|preventDefault={toggleIsSolo} />
+          checked={play.type === 'SAU'}
+          on:click|preventDefault={(_) => setType('SAU')} />
         <label
           class="btn btn-lg btn-outline-success shadow-none"
           for="sauspiel"
-          on:click|preventDefault={toggleIsSolo}>Sauspiel</label>
+          on:click|preventDefault={(_) => setType('SAU')}>Sauspiel</label>
       </div>
-      <div class="col-6 d-grid gap-2 p-0">
+      <div class="col-5 d-grid gap-2 p-0">
         <input
           type="checkbox"
           class="btn-check"
           id="solo"
           autocomplete="off"
-          checked={play.isSolo}
-          on:click|preventDefault={toggleIsSolo} />
+          checked={play.type === 'SOLO'}
+          on:click|preventDefault={(_) => setType('SOLO')} />
         <label
           class="btn btn-lg btn-outline-danger shadow-none"
           for="solo"
-          on:click|preventDefault={toggleIsSolo}>Solo</label>
+          on:click|preventDefault={(_) => setType('SOLO')}>Solo</label>
+      </div>
+      <div class="col-2 d-grid gap-2 p-0">
+        <input
+          type="checkbox"
+          class="btn-check"
+          id="ramsch"
+          autocomplete="off"
+          checked={play.type === 'RAMSCH'}
+          on:click|preventDefault={(_) => setType('RAMSCH')} />
+        <label
+          class="btn btn-lg btn-outline-secondary shadow-none"
+          for="solo"
+          on:click|preventDefault={(_) => setType('RAMSCH')}>Ramsch</label>
       </div>
     </div>
 
-    <h2 class="mt-4">Spieler:</h2>
+    <h2 class="mt-4">
+      {play.type !== 'RAMSCH' ? 'Spieler' : 'Verlierer'}:
+    </h2>
     <div class="row justify-content-center my-3 px-2">
       <div class="col-3 d-grid gap-2 p-0">
         <input
@@ -196,94 +226,133 @@
     </div>
     <hr />
 
-    <div class="row justify-content-center">
-      <div class="col-6 d-grid gap-2 p-0">
-        <input
-          type="checkbox"
-          class="btn-check"
-          id="isWon"
-          autocomplete="off"
-          bind:checked={play.isWon} />
-        <label
-          class="btn btn-lg btn-outline-success shadow-none fs-1"
-          for="isWon">Gewonnen?</label>
+    {#if play.type !== 'RAMSCH'}
+      <div class="row justify-content-center">
+        <div class="col-3 d-grid gap-2 p-0">
+          <input
+            type="checkbox"
+            class="btn-check"
+            id="isWon"
+            autocomplete="off"
+            disabled={play.type === 'RAMSCH'}
+            bind:checked={play.isWon} />
+          <label class="btn btn-lg btn-outline-success shadow-none" for="isWon"
+            >Gewonnen?</label>
+        </div>
+      </div>
+    {:else}
+      <div class="row">
+        <div class="col-4">
+          <h2>Jungfrauen:</h2>
+        </div>
+
+        {#each play.players.filter((x) => x && x !== play.p1 && x !== play.p2) as p, index}
+          <div class="col row justify-content-center px-3">
+            <input
+              type="checkbox"
+              class="btn-check"
+              id={'j' + index}
+              autocomplete="off"
+              checked={play.players[index].isJungfrau}
+              on:click|preventDefault={() =>
+                (play.players[index].isJungfrau =
+                  !play.players[index].isJungfrau)} />
+            <label
+              class="btn btn-lg btn-outline-secondary shadow-none"
+              for={'j' + index}
+              on:click|preventDefault={() =>
+                (play.players[index].isJungfrau =
+                  !play.players[index].isJungfrau)}>
+              {p.name}
+            </label>
+          </div>
+        {/each}
+      </div>
+    {/if}
+    <hr />
+    <div style="height: 14em">
+      <h2>Extras:</h2>
+      {#if play.type !== 'RAMSCH'}
+        <div class="row justify-content-center px-2">
+          <div class="col-6 d-grid gap-2 p-0">
+            <input
+              type="checkbox"
+              class="btn-check"
+              id="schneider"
+              autocomplete="off"
+              checked={play.schneider}
+              on:click|preventDefault={toggleSchneider} />
+            <label
+              class="btn btn-lg btn-outline-warning shadow-none"
+              for="schneider"
+              on:click|preventDefault={toggleSchneider}>Schneider</label>
+          </div>
+          <div class="col-6 d-grid gap-2 p-0">
+            <input
+              type="checkbox"
+              class="btn-check"
+              id="schwarz"
+              autocomplete="off"
+              checked={play.schwarz}
+              on:click|preventDefault={toggleSchwarz} />
+            <label
+              class="btn btn-lg btn-outline-danger shadow-none"
+              for="schwarz"
+              on:click|preventDefault={toggleSchwarz}>Schwarz</label>
+          </div>
+        </div>
+        <div class="row justify-content-around align-items-center my-2">
+          <div class="col-5 row justify-content-end align-items-center">
+            Läufer: <button
+              class="btn btn-dark col-3 ms-2"
+              on:click|preventDefault={() =>
+                (play.lauf = play.lauf > 0 ? play.lauf - 1 : play.lauf)}
+              >-</button>
+          </div>
+          <div class="col-2 text-center fs-3 d-flex justify-content-center">
+            <div class="circle">{play.lauf}</div>
+          </div>
+          <div class="col-5 row justify-content-start align-items-center">
+            <button
+              class="btn btn-dark col-3"
+              on:click|preventDefault={() =>
+                (play.lauf = play.lauf < 14 ? play.lauf + 1 : play.lauf)}
+              >+</button>
+          </div>
+        </div>
+      {/if}
+      <div class="row justify-content-around align-items-center my-2">
+        <div class="col-5 row justify-content-end align-items-center">
+          Klopfer:
+          <button
+            class="btn btn-dark col-3 ms-2"
+            on:click|preventDefault={() =>
+              (play.multiplier =
+                play.multiplier > 0 ? play.multiplier - 1 : play.multiplier)}>
+            -
+          </button>
+        </div>
+        <div class="col-2 text-center fs-3 d-flex justify-content-center">
+          <div class="circle">{play.multiplier}</div>
+        </div>
+        <div class="col-5 row justify-content-start align-items-center">
+          <button
+            class="btn btn-dark col-3"
+            on:click|preventDefault={() =>
+              (play.multiplier =
+                play.multiplier < 6 ? play.multiplier + 1 : play.multiplier)}
+            >+</button>
+        </div>
       </div>
     </div>
     <hr />
-
-    <h2>Extras:</h2>
-
-    <div class="row justify-content-center px-2">
-      <div class="col-6 d-grid gap-2 p-0">
-        <input
-          type="checkbox"
-          class="btn-check"
-          id="schneider"
-          autocomplete="off"
-          checked={play.schneider}
-          on:click|preventDefault={toggleSchneider} />
-        <label
-          class="btn btn-lg btn-outline-warning shadow-none"
-          for="schneider"
-          on:click|preventDefault={toggleSchneider}>Schneider</label>
-      </div>
-      <div class="col-6 d-grid gap-2 p-0">
-        <input
-          type="checkbox"
-          class="btn-check"
-          id="schwarz"
-          autocomplete="off"
-          checked={play.schwarz}
-          on:click|preventDefault={toggleSchwarz} />
-        <label
-          class="btn btn-lg btn-outline-danger shadow-none"
-          for="schwarz"
-          on:click|preventDefault={toggleSchwarz}>Schwarz</label>
-      </div>
-    </div>
-
-    <div class="row justify-content-around align-items-center my-2">
-      <div class="col-5 row justify-content-end align-items-center">
-        Läufer: <button
-          class="btn btn-dark col-3 ms-2"
-          on:click|preventDefault={() =>
-            (play.lauf = play.lauf > 0 ? play.lauf - 1 : play.lauf)}>-</button>
-      </div>
-      <div class="col-2 text-center fs-3 d-flex justify-content-center">
-        <div class="circle">{play.lauf}</div>
-      </div>
-      <div class="col-5 row justify-content-start align-items-center">
-        <button
-          class="btn btn-dark col-3"
-          on:click|preventDefault={() =>
-            (play.lauf = play.lauf < 14 ? play.lauf + 1 : play.lauf)}>+</button>
-      </div>
-    </div>
-
-    <div class="row justify-content-around align-items-center my-2">
-      <div class="col-5 row justify-content-end align-items-center">
-        Klopfer: <button
-          class="btn btn-dark col-3 ms-2"
-          on:click|preventDefault={() =>
-            (play.klopf = play.klopf > 0 ? play.klopf - 1 : play.klopf)}
-          >-</button>
-      </div>
-      <div class="col-2 text-center fs-3 d-flex justify-content-center">
-        <div class="circle">{play.klopf}</div>
-      </div>
-      <div class="col-5 row justify-content-start align-items-center">
-        <button
-          class="btn btn-dark col-3"
-          on:click|preventDefault={() =>
-            (play.klopf = play.klopf < 6 ? play.klopf + 1 : play.klopf)}
-          >+</button>
-      </div>
-    </div>
   </div>
-  <hr />
   <h2>
-    Preis: {play.isSolo ? '3 x' : ''}
-    {price} Punkte {play.isSolo ? `(${3 * price} P)` : ''}
+    Preis:
+    {play.type === 'SOLO' || play.type === 'RAMSCH'
+      ? 3 + jungfrauCount + ' x'
+      : ''}
+    {price} Punkte {play.type === 'SOLO' ? `(${3 * price} P)` : ''}
   </h2>
   <hr />
   <button type="submit" class="btn btn-lg btn-success">Spiel eintragen</button>
