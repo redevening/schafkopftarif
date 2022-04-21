@@ -37,4 +37,8 @@
   main {
     max-width: 700px;
   }
+  html, body {
+    height: 100%;
+    margin: 0;
+  }
 </style>
