@@ -1,20 +1,10 @@
 <script>
-  import { createGameDocument } from '../common/db'
+  import { createGameDocument, fetchPlayerDocumentsRealtime, unsubscribe } from '../common/db'
   import router from 'page'
   import { stringToColor } from '../common/util'
+  import { onMount, onDestroy } from 'svelte'
 
-  let players = [{
-    name: 'ONE'
-  },
-  {
-    name: 'TWO'
-  },
-  {
-    name: 'THREE'
-  },
-  {
-    name: 'FOUR'
-  }]
+  let allPlayers = [];
   const G1 = [
     'Zillertaler',
     'Alderstätter',
@@ -44,33 +34,7 @@
     'versifften',
     'Identitären',
   ]
-  const NAMES = [
-    'Ade',
-    'Anderl',
-    'Beda',
-    'Done',
-    'Franz',
-    'Schos',
-    'Lenzi',
-    'Wast',
-    'Xare',
-    'Babett',
-    'Betti',
-    'Anni',
-    'Evi',
-    'Gerta',
-    'Kathi',
-    'Magda',
-    'Reserl',
-    'Sigi',
-    'Vroni',
-    'Zenze',
-  ]
-  function randomName() {
-    const rnd = NAMES[Math.floor(Math.random() * NAMES.length)]
-    NAMES.splice(NAMES.indexOf(rnd), 1)
-    return rnd
-  }
+
   function randomGroup() {
     const g1 = G1[Math.floor(Math.random() * G1.length)]
     G1.splice(G1.indexOf(g1), 1)
@@ -82,22 +46,32 @@
   let game = {
     name: randomGroup(),
     p1: {
-      name: randomName(),
+      name: '',
     },
     p2: {
-      name: randomName(),
+      name: '',
     },
     p3: {
-      name: randomName(),
+      name: '',
     },
     p4: {
-      name: randomName(),
+      name: '',
     },
     sauspiel: 20,
     solo: 50,
     extra: 10,
     dealer: 1,
   }
+
+  onMount(() => {
+    fetchPlayerDocumentsRealtime((playersData) => {
+      allPlayers = playersData
+
+      for (let i = 0; i < 4; i++) {
+        game['p' + (i+1)] = !game['p' + (i+1)].id ? allPlayers[Math.random()] : game['p' + (i+1)]  
+      }
+  })})
+  onDestroy(() => unsubscribe())
 
   async function startRound() {
     await createGameDocument(game)
@@ -117,89 +91,21 @@
     <hr />
 
     <h2>Spieler</h2>
-    <!-- <div class="row justify-content-center my-2">
-      <div class="col-2">
-        <img
-          src="https://avatars.dicebear.com/api/adventurer/{game.p1
-            .name}-image.svg"
-          alt="avatar"
-          height="60px" />
-      </div>
-      <div class="form-floating col-sm-6">
-        <input
-          class="form-control"
-          id="p1"
-          bind:value={game.p1.name}
-          required />
-        <label for="p1">Spieler 1</label>
-      </div>
-    </div>
-    <div class="row justify-content-center my-2">
-      <div class="col-2">
-        <img
-          src="https://avatars.dicebear.com/api/adventurer/{game.p2
-            .name}-image.svg"
-          alt="avatar"
-          height="60px" />
-      </div>
-      <div class="form-floating col-sm-6">
-        <input
-          class="form-control"
-          id="p2"
-          bind:value={game.p2.name}
-          required />
-        <label for="p2">Spieler 2</label>
-      </div>
-    </div>
-    <div class="row justify-content-center my-2">
-      <div class="col-2">
-        <img
-          src="https://avatars.dicebear.com/api/adventurer/{game.p3
-            .name}-image.svg"
-          alt="avatar"
-          height="60px" />
-      </div>
-      <div class="form-floating col-sm-6">
-        <input
-          class="form-control"
-          id="p3"
-          bind:value={game.p3.name}
-          required />
-        <label for="p3">Spieler 3</label>
-      </div>
-    </div>
-    <div class="row justify-content-center my-2">
-      <div class="col-2">
-        <img
-          src="https://avatars.dicebear.com/api/adventurer/{game.p4
-            .name}-image.svg"
-          alt="avatar"
-          height="60px" />
-      </div>
-      <div class="form-floating col-sm-6">
-        <input
-          class="form-control"
-          id="p4"
-          bind:value={game.p4.name}
-          required />
-        <label for="p4">Spieler 4</label>
-      </div>
-    </div> -->
 
     <div class="parent">
-      {#each players as player}
+      {#each [...Array(4).keys()].map(x => x + 1) as i}
         <div
           class="card m-2 pointer square"
           style="background-color: {stringToColor(
-            player.name
-          )}"
+            game['p' + i].name
+          )}; height: 14em"
           on:click={() => openPlayer(player)}>
           <img
-            src="https://avatars.dicebear.com/api/adventurer/{player.name}-image.svg"
+            src="https://avatars.dicebear.com/api/adventurer/{game['p' + i].name}-image.svg"
             alt="avatar" />
           <div class="card-body">
             <p class="card-text fw-bold">
-              {player.name}
+              {game['p' + i].name}
             </p>
           </div>
         </div>
