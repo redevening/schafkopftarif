@@ -125,8 +125,8 @@
 
 <form on:submit|preventDefault={recordPlay}>
   <div class="container text-start my-1">
-    <div class="row justify-content-center">
-      <div class="col-5 d-grid gap-2 p-0">
+    <div class="row justify-content-center px-2">
+      <div class="col col-sm-5 d-grid gap-2 p-0">
         <input
           type="checkbox"
           class="btn-check"
@@ -139,7 +139,7 @@
           for="sauspiel"
           on:click|preventDefault={(_) => setType('SAU')}>Sauspiel</label>
       </div>
-      <div class="col-5 d-grid gap-2 p-0">
+      <div class="col col-sm-5 d-grid gap-2 p-0">
         <input
           type="checkbox"
           class="btn-check"
@@ -152,7 +152,7 @@
           for="solo"
           on:click|preventDefault={(_) => setType('SOLO')}>Solo</label>
       </div>
-      <div class="col-2 d-grid gap-2 p-0">
+      <div class="col col-sm-2 d-grid gap-2 p-0">
         <input
           type="checkbox"
           class="btn-check"
@@ -241,13 +241,13 @@
         </div>
       </div>
     {:else}
-      <div class="row">
-        <div class="col-4">
-          <h2>Jungfrauen:</h2>
+      <div class="row px-2">
+        <div class="col align-self-center">
+          <h3 class="align-middle">Jungfrau:</h3>
         </div>
 
         {#each play.players.filter((x) => x && x !== play.p1 && x !== play.p2) as p, index}
-          <div class="col row justify-content-center px-3">
+          <div class="col row justify-content-center">
             <input
               type="checkbox"
               class="btn-check"
@@ -270,7 +270,7 @@
       </div>
     {/if}
     <hr />
-    <div style="height: 14em">
+    <div class="block-height">
       <h2>Extras:</h2>
       {#if play.type !== 'RAMSCH'}
         <div class="row justify-content-center px-2">
@@ -366,4 +366,8 @@
     height: 2.5rem;
     line-height: 2.2rem;
   }
+  .block-height {
+    height: 11em
+  }
+
 </style>
