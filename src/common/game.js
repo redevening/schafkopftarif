@@ -57,8 +57,7 @@ function calculatePlayBasePrice(play) {
   let signum = play.isWon ? 1 : -1
   switch (play.type) {
     case 'SKIP':
-      base = 0
-      break
+      return 0
     case 'SAU':
       base = play.sauspielPrice
       break
@@ -98,7 +97,7 @@ function calculateEarningsForSinglePlay(player, play) {
   const soloFactor =
     isPlayer && (play.type === 'SOLO' || play.type === 'RAMSCH') ? 3 : 1
   const playerFactor = isPlayer ? 1 : -1
-  let jungfrauFactor = play.type === 'RAMSCH' && player.isJungfrau ? 2 : 1
+  const jungfrauFactor = play.type === 'RAMSCH' && player.isJungfrau ? 2 : 1
 
   return soloFactor * playerFactor * jungfrauFactor * play.price
 }
