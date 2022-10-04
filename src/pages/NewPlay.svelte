@@ -1,5 +1,5 @@
 <script>
-  import { emptyPlay, emptyGame, calculatePlayPrice } from '../common/game'
+  import { emptyPlay, emptyGame, calculatePlayBasePrice } from '../common/game'
   import {
     createPlayDocument,
     fetchGameDocumentRealtime,
@@ -13,7 +13,7 @@
 
   let game = emptyGame
   let play = emptyPlay
-  $: price = calculatePlayPrice(play)
+  $: price = calculatePlayBasePrice(play)
   $: players = [undefined, game.p1, game.p2, game.p3, game.p4]
   $: jungfrauCount = play.players.filter((p) => p && p.isJungfrau).length
 
@@ -67,7 +67,7 @@
     }
 
     if (play.type === 'SOLO' || play.type === 'RAMSCH') {
-      // solo player is alone
+      // solo/ramsch player is alone
       play.p1 = player
       play.p2 = null
     } else {

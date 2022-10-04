@@ -52,7 +52,7 @@ const emptyPlay = {
  *
  * For a Skip zero is returned.
  */
-function calculatePlayPrice(play) {
+function calculatePlayBasePrice(play) {
   let base
   let signum = play.isWon ? 1 : -1
   switch (play.type) {
@@ -85,18 +85,27 @@ function calculateEarningsForPlayer(player, plays) {
   let result = [0]
   let sum = 0
 
-  plays.forEach((play) => {
-    const isPlayer =
-      play.p1?.name === player.name || play.p2?.name === player.name
-    const soloFactor =
-      play.type === 'SOLO' || (play.type === 'RAMSCH' && isPlayer) ? 3 : 1
-    const playerFactor = isPlayer ? 1 : -1
-    let jungfrauFactor = play.type === 'RAMSCH' && player.isJungfrau ? 2 : 1
-
-    sum += soloFactor * playerFactor * jungfrauFactor * play.price
+  plays.forEach((p) => {
+    sum += calculateEarningsForSinglePlay(player, p)
     result.push(sum)
   })
   return result
 }
 
-export { emptyGame, emptyPlay, calculatePlayPrice, calculateEarningsForPlayer }
+function calculateEarningsForSinglePlay(player, play) {
+  const isPlayer =
+    play.p1?.name === player.name || play.p2?.name === player.name
+  const soloFactor =
+    isPlayer && (play.type === 'SOLO' || play.type === 'RAMSCH') ? 3 : 1
+  const playerFactor = isPlayer ? 1 : -1
+  let jungfrauFactor = play.type === 'RAMSCH' && player.isJungfrau ? 2 : 1
+
+  return soloFactor * playerFactor * jungfrauFactor * play.price
+}
+
+export {
+  emptyGame,
+  emptyPlay,
+  calculatePlayBasePrice,
+  calculateEarningsForPlayer,
+}
