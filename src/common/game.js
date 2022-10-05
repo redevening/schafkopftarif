@@ -50,28 +50,34 @@ const emptyPlay = {
  *   The full amount the looser has to pay would be (three + number_of_jungfrau)
  *   times the calculated price. A Jungfrau player gets double the returned amount.
  *
+ * Lauf only count for SAU if lauf >=2, for SOLO if lauf >= 3
+ *
  * For a Skip zero is returned.
  */
 function calculatePlayBasePrice(play) {
   let base
   let signum = play.isWon ? 1 : -1
+  let lauf = 0
   switch (play.type) {
     case 'SKIP':
       return 0
     case 'SAU':
       base = play.sauspielPrice
+      lauf = play.lauf >= 2 ? play.lauf : 0
       break
     case 'RAMSCH':
       base = play.sauspielPrice
       signum = -1
+      lauf = play.lauf
       break
     case 'SOLO':
       base = play.soloPrice
+      lauf = play.lauf >= 3 ? play.lauf : 0
   }
   return (
     signum *
     Math.pow(2, play.multiplier) *
-    (base + play.extraPrice * (+play.schneider + +play.schwarz + play.lauf))
+    (base + play.extraPrice * (+play.schneider + +play.schwarz + lauf))
   )
 }
 
@@ -94,10 +100,24 @@ function calculateEarningsForPlayer(player, plays) {
 function calculateEarningsForSinglePlay(player, play) {
   const isPlayer =
     play.p1?.name === player.name || play.p2?.name === player.name
+
+  //compare with player object in play that might contain isJungfrau prop
+  if (isPlayer) {
+    player = play.players.filter((p) => p?.name === player.name)
+  }
+
   const soloFactor =
     isPlayer && (play.type === 'SOLO' || play.type === 'RAMSCH') ? 3 : 1
   const playerFactor = isPlayer ? 1 : -1
-  const jungfrauFactor = play.type === 'RAMSCH' && player.isJungfrau ? 2 : 1
+  let jungfrauFactor = 1
+
+  if (play.type === 'RAMSCH' && !play.isWon) {
+    jungfrauFactor = play.players.filter((p) => p?.isJungfrau).length
+  } else if (play.type === 'RAMSCH' && play.isWon && player.isJungfrau) {
+    jungfrauFactor = 2
+  }
+
+  play.type === 'RAMSCH' && player.isJungfrau ? 2 : 1
 
   return soloFactor * playerFactor * jungfrauFactor * play.price
 }

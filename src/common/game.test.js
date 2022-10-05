@@ -37,12 +37,12 @@ describe('', () => {
       expect(basePrice).toBe(-SOLO_PRICE)
     })
     test('of RAMSCH is negative soloPrice', () => {
-      play.type = 'SOLO'
+      play.type = 'RAMSCH'
       play.isWon = false
 
       const basePrice = calculatePlayBasePrice(play)
 
-      expect(basePrice).toBe(-SOLO_PRICE)
+      expect(basePrice).toBe(-SAU_PRICE)
     })
     test('of SKIP is ZERO', () => {
       play.type = 'SKIP'
@@ -96,7 +96,7 @@ describe('', () => {
 
     // Second game Player A and B win Sauspiel with 2 lauf
     test('should be correct for Sauspiel', () => {
-      plays.push({
+      let p = {
         ...play,
         p1: playerA,
         p2: playerB,
@@ -104,11 +104,80 @@ describe('', () => {
         type: 'SAU',
         isWon: true,
         lauf: 2,
-        price: 0, //todo calc base price
-      })
-      console.log(plays)
-      //const earnings = calculateEarningsForPlayer(playerA, plays)
-      //expect(earnings).toEqual([0,0,20])
+      }
+      p.price = calculatePlayBasePrice(p)
+      expect(p.price).toBe(40)
+      plays.push(p)
+
+      expect(calculateEarningsForPlayer(playerA, plays)).toEqual([0, 0, 40])
+      expect(calculateEarningsForPlayer(playerB, plays)).toEqual([0, 0, 40])
+      expect(calculateEarningsForPlayer(playerC, plays)).toEqual([0, 0, -40])
+      expect(calculateEarningsForPlayer(playerD, plays)).toEqual([0, 0, -40])
+    })
+
+    // Third game Player B looses Solo 2x klopf Solo with 2 lauf
+    test('should be correct for Solo', () => {
+      let p = {
+        ...play,
+        p1: playerB,
+        p2: undefined,
+        players: [playerA, playerB, playerC, playerD],
+        type: 'SOLO',
+        isWon: false,
+        lauf: 2,
+        multiplier: 2,
+      }
+      p.price = calculatePlayBasePrice(p)
+      expect(p.price).toBe(-200)
+      plays.push(p)
+
+      expect(calculateEarningsForPlayer(playerA, plays)).toEqual([
+        0, 0, 40, 240,
+      ])
+      expect(calculateEarningsForPlayer(playerB, plays)).toEqual([
+        0, 0, 40, -560,
+      ])
+      expect(calculateEarningsForPlayer(playerC, plays)).toEqual([
+        0, 0, -40, 160,
+      ])
+      expect(calculateEarningsForPlayer(playerD, plays)).toEqual([
+        0, 0, -40, 160,
+      ])
+    })
+
+    // Fourth game Player D looses Ramsch, with A being Jungfrau
+    test('should be correct for Ramsch', () => {
+      let p = {
+        ...play,
+        p1: playerD,
+        players: [
+          {
+            ...playerA,
+            isJungfrau: true,
+          },
+          playerB,
+          playerC,
+          playerD,
+        ],
+        type: 'RAMSCH',
+        isWon: false,
+      }
+      p.price = calculatePlayBasePrice(p)
+      expect(p.price).toBe(-20)
+      plays.push(p)
+
+      expect(calculateEarningsForPlayer(playerA, plays)).toEqual([
+        0, 0, 40, 240, 260,
+      ])
+      expect(calculateEarningsForPlayer(playerB, plays)).toEqual([
+        0, 0, 40, -560, -540,
+      ])
+      expect(calculateEarningsForPlayer(playerC, plays)).toEqual([
+        0, 0, -40, 160, 180,
+      ])
+      expect(calculateEarningsForPlayer(playerD, plays)).toEqual([
+        0, 0, -40, 160, 80,
+      ])
     })
   })
 })
