@@ -98,28 +98,23 @@ function calculateEarningsForPlayer(player, plays) {
 }
 
 function calculateEarningsForSinglePlay(player, play) {
+  //compare with player object in play
+  player = play.players.filter((p) => p?.name === player.name)[0]
   const isPlayer =
     play.p1?.name === player.name || play.p2?.name === player.name
-
-  //compare with player object in play that might contain isJungfrau prop
-  if (isPlayer) {
-    player = play.players.filter((p) => p?.name === player.name)
-  }
-
-  const soloFactor =
-    isPlayer && (play.type === 'SOLO' || play.type === 'RAMSCH') ? 3 : 1
   const playerFactor = isPlayer ? 1 : -1
-  let jungfrauFactor = 1
+  let howOften =
+    isPlayer && (play.type === 'SOLO' || play.type === 'RAMSCH') ? 3 : 1
 
-  if (play.type === 'RAMSCH' && !play.isWon) {
-    jungfrauFactor = play.players.filter((p) => p?.isJungfrau).length
-  } else if (play.type === 'RAMSCH' && play.isWon && player.isJungfrau) {
-    jungfrauFactor = 2
+  if (play.type === 'RAMSCH') {
+    if (isPlayer) {
+      howOften += play.players.filter((p) => p?.isJungfrau).length
+    } else if (player.isJungfrau) {
+      howOften += 1
+    }
   }
 
-  play.type === 'RAMSCH' && player.isJungfrau ? 2 : 1
-
-  return soloFactor * playerFactor * jungfrauFactor * play.price
+  return playerFactor * howOften * play.price
 }
 
 export {

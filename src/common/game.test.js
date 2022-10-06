@@ -66,8 +66,10 @@ describe('', () => {
       expect(basePrice).toBe(400)
     })
   })
+
   describe('player earnings', () => {
     // test multiple plays played after each other
+    // Tests have to be exectued after each other
     const playerA = { name: 'A' }
     const playerB = { name: 'B' }
     const playerC = { name: 'C' }
@@ -167,7 +169,7 @@ describe('', () => {
       plays.push(p)
 
       expect(calculateEarningsForPlayer(playerA, plays)).toEqual([
-        0, 0, 40, 240, 260,
+        0, 0, 40, 240, 280,
       ])
       expect(calculateEarningsForPlayer(playerB, plays)).toEqual([
         0, 0, 40, -560, -540,
