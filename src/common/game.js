@@ -99,7 +99,8 @@ function calculateEarningsForPlayer(player, plays) {
 
 function calculateEarningsForSinglePlay(player, play) {
   //compare with player object in play
-  player = play.players.filter((p) => p?.name === player.name)[0]
+  const filtered = play.players.filter((p) => p?.name === player.name)[0]
+  player = filtered ?? filtered[0]
   const isPlayer =
     play.p1?.name === player.name || play.p2?.name === player.name
   const playerFactor = isPlayer ? 1 : -1
