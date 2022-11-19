@@ -89,6 +89,7 @@
     const skip = {
       ...emptyPlay,
       gameId: params.id,
+      players: [game.p1, game.p2, game.p3, game.p4],
       type: 'SKIP',
     }
     await createPlayDocument(skip)
